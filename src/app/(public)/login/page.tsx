@@ -15,6 +15,7 @@ import {
   ContainerNames,
   ContainerRedirect,
   ContainerRedirectRecover,
+  GlobalStyle,
   InputPassword,
   StyledButton,
   StyledInput,
@@ -65,59 +66,63 @@ export default function Login() {
     }
   };
   return (
-    <Container>
-      <Card>
-        <StyledTitle>Login</StyledTitle>
+    <>
+      <Container>
+        <GlobalStyle />
+        <Card>
+          <StyledTitle>Faça seu Login</StyledTitle>
 
-        <ContainerRedirect>
-          <TextRedirect>
-            Ainda não tem uma conta?{" "}
-            <StyledLink href="/register">Cadastre-se!</StyledLink>
-          </TextRedirect>
-        </ContainerRedirect>
+          <ContainerRedirect>
+            <TextRedirect>
+              Ainda não tem uma conta?{" "}
+              <StyledLink href="/register">Cadastre-se!</StyledLink>
+            </TextRedirect>
+          </ContainerRedirect>
 
-        <form onSubmit={handleSubmit}>
-          <ContainerNames>
-            <div>
-              <StyledInput
-                type="text"
-                name="email"
-                id="email"
-                onChange={handleChange}
-                placeholder="Digite seu Email"
-              />
-            </div>
+          <form onSubmit={handleSubmit}>
+            <ContainerNames>
+              <div>
+                <StyledInput
+                  type="text"
+                  name="email"
+                  id="email"
+                  onChange={handleChange}
+                  placeholder="Exemplo@gmail.com"
+                />
+              </div>
 
-            <CardInputPassword className="flex items-center">
-              <InputPassword
-                type={viewPassword ? "text" : "password"}
-                name="password"
-                id="password"
-                onChange={handleChange}
-                placeholder="Digite sua senha"
-              />
+              <CardInputPassword className="flex items-center">
+                <InputPassword
+                  type={viewPassword ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  onChange={handleChange}
+                  placeholder="Digite sua senha"
+                />
 
-              <ButtonViewPassword onClick={handleViewPassword}>
-                {viewPassword ? <CiRead /> : <CiUnread />}
-              </ButtonViewPassword>
-            </CardInputPassword>
-          </ContainerNames>
+                <ButtonViewPassword onClick={handleViewPassword}>
+                  {viewPassword ? <CiRead /> : <CiUnread />}
+                </ButtonViewPassword>
+              </CardInputPassword>
+              <ContainerRedirectRecover>
 
-          <ContainerButton>
-            <StyledButton type="submit" disabled={loading}>
-              {loading ? "Carregando..." : "Entrar"}
-            </StyledButton>
-          </ContainerButton>
-        </form>
+                <TextRedirectRecover>
+                  <StyledLinkRecover>
+                    Esqueceu sua senha?
+                  </StyledLinkRecover>
+                </TextRedirectRecover>
+              </ContainerRedirectRecover>
+            </ContainerNames>
 
-        <ContainerRedirectRecover>
-          <TextRedirectRecover>
-            Esqueceu sua senha?{" "}
-            <StyledLinkRecover href="/">Click aqui!</StyledLinkRecover>
-          </TextRedirectRecover>
-        </ContainerRedirectRecover>
-      </Card>
-      {message && <p>{message}</p>}
-    </Container>
+            <ContainerButton>
+              <StyledButton type="submit" disabled={loading}>
+                {loading ? "Carregando..." : "Entrar"}
+              </StyledButton>
+            </ContainerButton>
+          </form>
+        </Card>
+        {message && <p>{message}</p>}
+      </Container>
+    </>
   );
 }

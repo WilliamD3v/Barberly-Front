@@ -1,4 +1,35 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const slideIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+// Animação para o ícone de menu (aumenta e gira)
+const scaleIn = keyframes`
+  0% {
+    transform: rotate(0deg) scale(0.5);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+`;
+
+// Animação para o ícone de fechar (diminui de tamanho e desaparece)
+const scaleOut = keyframes`
+  0% {
+    transform: rotate(180deg) scale(1);
+  }
+  100% {
+    transform: rotate(180deg) scale(0.5);
+  }
+`;
 
 // Estilos para o Dashboard
 export const DashboardContainer = styled.div`
@@ -80,20 +111,54 @@ export const Header = styled.header`
 
 export const Title = styled.h1`
   font-size: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 export const ContainerButtonHeaderDashboard = styled.button`
   font-size: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
   transition: transform 0.3s ease;
 
   @media (max-width: 768px) {
     font-size: 30px;
+  }
+
+  svg {
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .hidden {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
+
+  &.scale-in {
+    animation: ${scaleIn} 0.3s forwards;
+  }
+
+  &.scale-out {
+    font-size: 3.7rem;
+    animation: ${scaleOut} 0.3s forwards;
   }
 `;
 
 export const ContainerButtonsMenu = styled.div`
   display: flex;
   gap: 40px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  transform: translateX(100%);
+  animation: ${slideIn} 0.5s forwards;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -102,10 +167,16 @@ export const ContainerButtonsMenu = styled.div`
     top: 70px;
     right: 0;
     left: 52%;
-    width: 40%;
+    width: 47.9%;
+    height: 200vh;
     background-color: rgba(0, 0, 0, 0.8);
     padding: 40px;
     border-radius: 5px;
+  }
+
+  &.visible {
+    opacity: 1;
+    transform: translateX(0);
   }
 `;
 
@@ -127,6 +198,7 @@ export const Button = styled.button`
   }
 `;
 
+
 export const Content = styled.main`
   margin-top: 30px;
 `;
@@ -134,6 +206,10 @@ export const Content = styled.main`
 export const BoxElementsResume = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const ContainerResumeAndUrl = styled.main`
@@ -143,6 +219,11 @@ export const ContainerResumeAndUrl = styled.main`
   background-color: #ffff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const CopyButton = styled.button`
@@ -160,6 +241,11 @@ export const CopyButton = styled.button`
   &:hover {
     background-color: #696969;
   }
+
+  @media (max-width: 768px) {
+    width: 30%;
+    font-size: 12px;
+  }
 `;
 
 export const StyledLink = styled.a`
@@ -168,6 +254,10 @@ export const StyledLink = styled.a`
   text-decoration: none;
   &:hover {
     text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
   }
 `;
 
@@ -180,6 +270,10 @@ export const SummaryCard = styled.div`
   gap: 2rem;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
+  }
 `;
 
 export const CardItem = styled.div`
@@ -191,6 +285,10 @@ export const CardItem = styled.div`
 export const CardLabel = styled.p`
   font-size: 14px;
   color: #6c757d;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `;
 
 export const ServiceList = styled.ul`
