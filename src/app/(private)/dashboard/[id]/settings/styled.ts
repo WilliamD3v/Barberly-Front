@@ -6,6 +6,29 @@ export const Container = styled.div`
   height: 100vh;
 `;
 
+export const BoxButtonToggle = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+  }
+`;
+
+export const ButtonToggle = styled.button`
+  margin: 10px;
+  padding: 10px;
+  background: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    height: 5vh;
+  }
+`;
+
 export const Sidebar = styled.div`
   width: 250px;
   background: #2c3e50;
@@ -13,34 +36,50 @@ export const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    z-index: 10;
+    width: 60%;
+    height: 100%;
+    top: 0;
+  }
 `;
 
 export const BoxConfig = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
-`
+`;
 
 export const ButtonBackConfig = styled.button`
   font-size: 2rem;
-`
+`;
 
 export const TitleConfig = styled.h1`
   font-size: 1.3rem;
   font-weight: 600;
-`
+`;
 
 export const ContainerPreview = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
   right: 10rem;
-`
+
+  @media (max-width: 768px) {
+    right: 5rem;
+  }
+`;
 
 export const TitelPreview = styled.h1`
   font-weight: 600;
   font-size: 1.3rem;
-`
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
 
 export const Button = styled.button`
   background: none;
@@ -66,23 +105,23 @@ export const BoxButtonUpload = styled.div`
   justify-content: center;
   position: relative;
   top: 2rem;
-`
+`;
 export const ButtonUpload = styled.button`
   color: #ffff;
   padding: 1rem;
-  border-radius: .5rem;
-  background-color: #3E4245;
-  transition: .3s;
+  border-radius: 0.5rem;
+  background-color: #3e4245;
+  transition: 0.3s;
 
   &:hover {
-    background-color: #1E2428;
+    background-color: #1e2428;
   }
-`
+`;
 
 export const PreviewBox = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 export const PreviewContainer = styled.div`
   position: relative;

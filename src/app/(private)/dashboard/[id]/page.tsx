@@ -1,5 +1,7 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
+import { destroyCookie } from "nookies";
 import { UserData } from "@/types/users";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter, usePathname } from "next/navigation";
@@ -56,21 +58,21 @@ import {
   TooltipContainer,
 } from "./styled";
 
-import { getImageProfileData, getUserData } from "@/hooks/useUsers";
-import { destroyCookie } from "nookies";
+import {
+  getImageProfileData,
+  getServiceData,
+  getUserData,
+} from "@/hooks/useUsers";
 import { Section, SectionTitle } from "./agendamentos/styled";
 import { ImagensProfilesProps } from "@/types/imagesProfiles";
-import Image from "next/image";
-
-const serviços = [
-  { nome: "Corte de Cabelo", descrição: "Corte moderno e personalizado" },
-  { nome: "Barba", descrição: "Barba estilizada com lâmina" },
-  { nome: "Sobrancelha", descrição: "Design e acabamento de sobrancelha" },
-  {
-    nome: "Corte de Cabelo e Barba",
-    descrição: "Pacote combinado de corte e barba",
-  },
-];
+import { Services } from "@/types/services";
+import axios from "@/lib/axios";
+import {
+  BoxServiceItem,
+  BoxElements,
+  BoxButtonDeleteService,
+  ButtonDeleteService,
+} from "./service/styled";
 
 export default function Dashboard() {
   const { id } = useParams();
@@ -88,6 +90,11 @@ export default function Dashboard() {
     queryKey: ["ImageProfile", id],
     queryFn: () =>
       getImageProfileData(Array.isArray(id) ? id[0] : (id as string)),
+  });
+
+  const { data: dataServices, refetch } = useQuery<Services[]>({
+    queryKey: ["Service", id],
+    queryFn: () => getServiceData(Array.isArray(id) ? id[0] : (id as string)),
   });
 
   const [menu, setMenu] = useState(false);
@@ -131,6 +138,20 @@ export default function Dashboard() {
     router.push("/");
   };
 
+  const handleDeleteService = async (serviceId: string) => {
+    try {
+      const response = await axios.delete(
+        `/services/delete/${id}/${serviceId}`
+      );
+      if (response.status === 201) {
+        console.log("Serviço deletado com sucesso");
+        refetch();
+      }
+    } catch {
+      console.log("Erro ao deletar o serviço");
+    }
+  };
+
   return (
     <DashboardContainer>
       {/* Header */}
@@ -163,7 +184,7 @@ export default function Dashboard() {
 
         {!menu ? (
           <ContainerButtonHeaderDashboard onClick={handleMenu}>
-              <IoIosMenu className="visible" />
+            <IoIosMenu className="visible" />
           </ContainerButtonHeaderDashboard>
         ) : (
           <>
@@ -293,12 +314,31 @@ export default function Dashboard() {
         <Section>
           <SectionTitle>Serviços Disponíveis</SectionTitle>
           <ServiceList>
-            {serviços.map((servico, index) => (
-              <ServiceItem key={index}>
-                <ServiceTitle>{servico.nome}</ServiceTitle>
-                <ServiceDescription>{servico.descrição}</ServiceDescription>
-              </ServiceItem>
-            ))}
+            {dataServices && dataServices.length > 0 ? (
+              dataServices.map((servico) => (
+                <ServiceItem key={servico._id}>
+                  <BoxServiceItem>
+                    <BoxElements>
+                      <ServiceTitle>{servico.name}</ServiceTitle>
+                      <ServiceDescription>
+                        {servico.description}
+                      </ServiceDescription>
+                    </BoxElements>
+                    <BoxButtonDeleteService>
+                      <ButtonDeleteService
+                        onClick={() => handleDeleteService(servico._id)}
+                      >
+                        Delete
+                      </ButtonDeleteService>
+                    </BoxButtonDeleteService>
+                  </BoxServiceItem>
+                </ServiceItem>
+              ))
+            ) : (
+              <div>
+                <h1>Nenhum serviço cadastrado</h1>
+              </div>
+            )}
           </ServiceList>
         </Section>
       </Content>
@@ -308,6 +348,8 @@ export default function Dashboard() {
       <BoxClosed>
         <ButtonClosed onClick={handleRemoveCookies}>Sair</ButtonClosed>
       </BoxClosed>
+
+      {/*       <ComponentsService id={id as string} profilePrivate={profilePrivate}/> */}
     </DashboardContainer>
   );
 }

@@ -1,6 +1,13 @@
 "use client";
 import { useState } from "react";
+import axios from "@/lib/axios";
 import { CloudUpload } from "lucide-react";
+import { useParams, usePathname, useRouter } from "next/navigation";
+
+import { IoClose } from "react-icons/io5";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoMenu } from "react-icons/io5";
+
 import {
   Container,
   Sidebar,
@@ -20,19 +27,23 @@ import {
   BoxConfig,
   TitleConfig,
   ButtonBackConfig,
+  ButtonToggle,
+  BoxButtonToggle,
 } from "./styled";
-import axios from "@/lib/axios";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { IoIosArrowBack } from "react-icons/io";
 
 export default function SettingsPage() {
   const { id } = useParams();
-  const router = useRouter()
-  const urlPathname = usePathname()
+  const router = useRouter();
+  const urlPathname = usePathname();
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [files, setFiles] = useState<{ profile?: File; banner?: File }>({});
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleButtonVisible = () => {
+    setIsVisible((prev) => !prev);
+  };
 
   const handleImageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -51,9 +62,9 @@ export default function SettingsPage() {
   };
 
   const handleButtonBack = async () => {
-    const newUrl = urlPathname.replace("settings", "")
-    router.push(newUrl) 
-  }
+    const newUrl = urlPathname.replace("settings", "");
+    router.push(newUrl);
+  };
 
   const handleUpload = async () => {
     if (!files.profile && !files.banner) {
@@ -82,64 +93,74 @@ export default function SettingsPage() {
   };
 
   return (
-    <Container>
-      {/* Sidebar */}
-      <Sidebar>
-        <BoxConfig>
-          <ButtonBackConfig onClick={handleButtonBack}>
-            <IoIosArrowBack />
-          </ButtonBackConfig>
-          <TitleConfig>Configurações</TitleConfig>
-        </BoxConfig>
-        <Button>Perfil</Button>
-        <Button>Segurança</Button>
-        <Button>Notificações</Button>
-      </Sidebar>
+    <>
+      <BoxButtonToggle>
+        <ButtonToggle onClick={handleButtonVisible}>
+          {isVisible ? <IoMenu/> : <IoClose/>}
+        </ButtonToggle>
+      </BoxButtonToggle>
 
-      <Content>
-        <ContainerPreview>
-          <TitelPreview>Prévia da Imagem</TitelPreview>
-        </ContainerPreview>
+      {!isVisible && (
+        <Sidebar>
+          <BoxConfig>
+            <ButtonBackConfig onClick={handleButtonBack}>
+              <IoIosArrowBack />
+            </ButtonBackConfig>
+            <TitleConfig>Configurações</TitleConfig>
+          </BoxConfig>
+          <Button>Perfil</Button>
+          <Button>Segurança</Button>
+          <Button>Notificações</Button>
+        </Sidebar>
+      )}
 
-        <PreviewBox>
-          <PreviewContainer>
-            {bannerImage && (
-              <BannerPreview src={bannerImage} alt="Banner Preview" />
-            )}
-            {profileImage && (
-              <ProfilePreview src={profileImage} alt="Profile Preview" />
-            )}
-          </PreviewContainer>
-        </PreviewBox>
+      <Container>
+        {/* Sidebar */}
+        <Content>
+          <ContainerPreview>
+            <TitelPreview>Prévia da Imagem</TitelPreview>
+          </ContainerPreview>
 
-        <UploadContainer>
-          <UploadBox htmlFor="bannerUpload">
-            <CloudUpload size={50} color="#007bff" />
-            <UploadText>Selecione uma imagem para o banner</UploadText>
-          </UploadBox>
-          <input
-            id="bannerUpload"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => handleImageChange(e, "banner")}
-          />
-          <UploadBox htmlFor="profileUpload">
-            <CloudUpload size={50} color="#007bff" />
-            <UploadText>Selecione uma imagem para o perfil</UploadText>
-          </UploadBox>
-          <input
-            id="profileUpload"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => handleImageChange(e, "profile")}
-          />
-        </UploadContainer>
-        <BoxButtonUpload>
-          <ButtonUpload onClick={handleUpload}>Enviar Imagens</ButtonUpload>
-        </BoxButtonUpload>
-      </Content>
-    </Container>
+          <PreviewBox>
+            <PreviewContainer>
+              {bannerImage && (
+                <BannerPreview src={bannerImage} alt="Banner Preview" />
+              )}
+              {profileImage && (
+                <ProfilePreview src={profileImage} alt="Profile Preview" />
+              )}
+            </PreviewContainer>
+          </PreviewBox>
+
+          <UploadContainer>
+            <UploadBox htmlFor="bannerUpload">
+              <CloudUpload size={50} color="#007bff" />
+              <UploadText>Selecione uma imagem para o banner</UploadText>
+            </UploadBox>
+            <input
+              id="bannerUpload"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(e) => handleImageChange(e, "banner")}
+            />
+            <UploadBox htmlFor="profileUpload">
+              <CloudUpload size={50} color="#007bff" />
+              <UploadText>Selecione uma imagem para o perfil</UploadText>
+            </UploadBox>
+            <input
+              id="profileUpload"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(e) => handleImageChange(e, "profile")}
+            />
+          </UploadContainer>
+          <BoxButtonUpload>
+            <ButtonUpload onClick={handleUpload}>Enviar Imagens</ButtonUpload>
+          </BoxButtonUpload>
+        </Content>
+      </Container>
+    </>
   );
 }

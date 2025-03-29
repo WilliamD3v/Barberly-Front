@@ -3,6 +3,7 @@ import axios from "@/lib/axios";
 import { useState } from "react";
 import {
   Alert,
+  BoxButtunBack,
   Button,
   ContainerButton,
   ContainerForm,
@@ -13,14 +14,14 @@ import {
   Input,
   Title,
 } from "./styled";
-import { useParams, usePathname } from "next/navigation";
-import { ComponentsService } from "@/components/CardService";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import ButtonBack from "@/components/ButtonBack";
 
 export default function Service() {
   const { id } = useParams();
-  const urlPathname = usePathname()
-  const newUrl = urlPathname.replace("/service", "")
+  const router = useRouter()
+  const urlPathname = usePathname();
+  const newUrl = urlPathname.replace("/service", "");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,8 +32,6 @@ export default function Service() {
 
   const [alertError, setAlertError] = useState<string | null>(null);
   const [alertSuccess, setAlertSuccess] = useState<string | null>(null);
-
-  const profilePrivate = true;
 
   const formatCurrency = (val: string) => {
     const num = val.replace(/\D/g, ""); // Remove tudo que não é número
@@ -77,6 +76,8 @@ export default function Service() {
       if (response.status === 201) {
         setAlertSuccess("Serviço cadastrado com sucesso");
         setAlertError("");
+
+        router.push(newUrl)
       }
     } catch {
       setAlertError("Erro ao cadastrar serviço");
@@ -85,19 +86,19 @@ export default function Service() {
 
   return (
     <>
+      <BoxButtunBack>
+        <ButtonBack url={newUrl} />
+      </BoxButtunBack>
 
-    <ButtonBack url={newUrl} />
+      <ContainerTitle>
+        <Title>Serviços</Title>
+      </ContainerTitle>
 
       <ContainerGeral>
         <GlobalStyle />
-
         {/* Formulário de cadastro */}
-        <ContainerTitle>
-          <Title>Serviços</Title>
-        </ContainerTitle>
-
         <FormContainerWrapper>
-          <ContainerForm onSubmit={handleSubmit}>
+          <ContainerForm>
             <Input
               type="text"
               name="name"
@@ -136,7 +137,7 @@ export default function Service() {
               onChange={handleChange}
             />
             <ContainerButton>
-              <Button type="submit">Enviar</Button>
+              <Button onClick={handleSubmit}>Enviar</Button>
             </ContainerButton>
           </ContainerForm>
 
@@ -144,7 +145,7 @@ export default function Service() {
           {alertSuccess && <Alert isSuccess={true}>{alertSuccess}</Alert>}
         </FormContainerWrapper>
 
-        <ComponentsService id={id as string} profilePrivate={profilePrivate} />
+        {/*         <ComponentsService id={id as string} profilePrivate={profilePrivate} /> */}
       </ContainerGeral>
     </>
   );

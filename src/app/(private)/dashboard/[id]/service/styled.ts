@@ -6,8 +6,54 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
+export const BoxButtunBack = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+  }
+`;
+
+export const ContainerTitle = styled.div`
+  position: relative;
+  right: 15px;
+  top: 20px;
+  text-align: center;
+  margin-bottom: 0.5rem;
+`;
+
+export const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 50%;
+    height: 3px;
+    background-color: #28a745;
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+`;
+
 export const ContainerGeral = styled.div`
   margin: 5em;
+
+  @media (max-width: 768px) {
+    position: relative;
+    margin: 0;
+  }
 `;
 
 // Container principal para a lista de serviços
@@ -100,6 +146,20 @@ export const ServiceItem = styled.div`
   }
 `;
 
+export const BoxServiceItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const BoxElements = styled.div``;
+
+export const BoxButtonDeleteService = styled.div``;
+
+export const ButtonDeleteService = styled.div`
+  color: crimson;
+`;
+
 export const Alert = styled.p<{ isSuccess: boolean }>`
   margin-top: 10px;
   color: ${(props) => (props.isSuccess ? "#28a745" : "#e74c3c")};
@@ -119,13 +179,12 @@ export const Alert = styled.p<{ isSuccess: boolean }>`
 `;
 
 export const FormContainerWrapper = styled.div`
-  width: 90%; /* Padrão para dispositivos menores */
-  max-width: 900px; /* Limita a largura em telas maiores */
+  width: 90%;
   margin: 0 auto;
   padding: 2rem;
   background-color: #2b3137;
   border-radius: 10px;
-  border: 2px solid #4F5051;
+  border: 2px solid #4f5051;
   box-shadow: 30px 6px 100px rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease-in-out;
 
@@ -134,8 +193,10 @@ export const FormContainerWrapper = styled.div`
   }
 
   /* Ajuste para tablets e telas médias */
-  @media (min-width: 768px) {
-    width: 60%; /* Reduz a largura para tablets */
+  @media (max-width: 768px) {
+    width: 100%;
+    border: 0px;
+    box-shadow: 0px 0px 0px 0px;
   }
 
   /* Ajuste para desktops */
@@ -149,37 +210,7 @@ export const FormContainerWrapper = styled.div`
   }
 `;
 
-export const ContainerTitle = styled.div`
-  text-align: center;
-  margin-bottom: 0.5rem;
-`;
-
-export const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 2rem;
-  position: relative;
-  display: inline-block;
-  padding-bottom: 10px;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 50%;
-    height: 3px;
-    background-color: #28a745;
-    position: absolute;
-    bottom: 0;
-    left: 25%;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
-`;
-
-export const ContainerForm = styled.form`
+export const ContainerForm = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -188,8 +219,8 @@ export const ContainerForm = styled.form`
 export const Input = styled.input`
   padding: 0.8rem 1.2rem;
   font-size: 1.1rem;
-  border: 1px solid #3E4245;
-  background: #3E4245;
+  border: 1px solid #3e4245;
+  background: #3e4245;
   color: #fff;
   border-radius: 5px;
   outline: none;
