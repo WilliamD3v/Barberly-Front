@@ -17,6 +17,23 @@ export const getUserData = async (_id?: string) => {
   }
 };
 
+/* Dados de imagens de perfil da barbearia */
+export const getImageProfileData = async (_id?: string) => {
+  if (!_id) {
+    console.warn(
+      "Os dados de de imagens de perfil estao temporariamente indisponiveis"
+    );
+    return null
+  }
+
+  try {
+    const response = await axios.get(`upload/get-image/${_id}`)
+    return response.data
+  } catch (error) {
+    console.error("Error ao buscar imagens de perfil", error)
+  }
+};
+
 /* Dados de serviços da barbearia */
 export const getServiceData = async (_id?: string) => {
   if (!_id) {
@@ -93,9 +110,7 @@ export const getSchedulingData = async (
 };
 
 /* Dados de agendamentos de todos os funcionários da barbearia */
-export const getSchedulingDataAll = async (
-  barberId?: string,
-) => {
+export const getSchedulingDataAll = async (barberId?: string) => {
   if (!barberId) {
     console.warn(
       "Os dados do funcionário estão temporariamente indisponíveis."
@@ -104,9 +119,7 @@ export const getSchedulingDataAll = async (
   }
 
   try {
-    const response = await axios.get(
-      `reserve/getAll/${barberId}`
-    );
+    const response = await axios.get(`reserve/getAll/${barberId}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar dados do funcionário:", error);

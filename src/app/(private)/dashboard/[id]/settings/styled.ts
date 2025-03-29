@@ -15,6 +15,33 @@ export const Sidebar = styled.div`
   padding: 20px;
 `;
 
+export const BoxConfig = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+`
+
+export const ButtonBackConfig = styled.button`
+  font-size: 2rem;
+`
+
+export const TitleConfig = styled.h1`
+  font-size: 1.3rem;
+  font-weight: 600;
+`
+
+export const ContainerPreview = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  right: 10rem;
+`
+
+export const TitelPreview = styled.h1`
+  font-weight: 600;
+  font-size: 1.3rem;
+`
+
 export const Button = styled.button`
   background: none;
   border: none;
@@ -33,6 +60,24 @@ export const Content = styled.div`
   flex: 1;
   padding: 20px;
 `;
+
+export const BoxButtonUpload = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: 2rem;
+`
+export const ButtonUpload = styled.button`
+  color: #ffff;
+  padding: 1rem;
+  border-radius: .5rem;
+  background-color: #3E4245;
+  transition: .3s;
+
+  &:hover {
+    background-color: #1E2428;
+  }
+`
 
 export const PreviewBox = styled.div`
   display: flex;
@@ -70,12 +115,13 @@ export const ProfilePreview = styled.img`
 
 export const UploadContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 20px;
+  margin-top: 4rem;
 `;
 
-export const UploadBox = styled.label<{ banner?: boolean }>`
+export const UploadBox = styled.label`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,7 +131,7 @@ export const UploadBox = styled.label<{ banner?: boolean }>`
   padding: 20px;
   width: 100%;
   max-width: 400px;
-  height: ${(props) => (props.banner ? "200px" : "150px")};
+  height: 200px;
   cursor: pointer;
   transition: border-color 0.3s;
 

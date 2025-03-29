@@ -123,10 +123,7 @@ export const ContainerButtonHeaderDashboard = styled.button`
   border: none;
   cursor: pointer;
   transition: transform 0.3s ease;
-
-  @media (max-width: 768px) {
-    font-size: 30px;
-  }
+  z-index: 10;
 
   svg {
     transition:
@@ -152,6 +149,48 @@ export const ContainerButtonHeaderDashboard = styled.button`
   }
 `;
 
+export const ContainerButtonHeaderBackMenu = styled.div`
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+
+  @media (max-width: 768px) {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 1rem;
+  }
+
+  svg {
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .hidden {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
+
+  &.scale-in {
+    animation: ${scaleIn} 0.3s forwards;
+  }
+
+  &.scale-out-back {
+    font-size: 4.5rem;
+    animation: ${scaleOut} 0.3s forwards;
+
+    @media (max-width: 768px) {
+      font-size: 5rem;
+    }
+  }
+`;
+
 export const ContainerButtonsMenu = styled.div`
   display: flex;
   transition: opacity 0.3s ease;
@@ -161,7 +200,7 @@ export const ContainerButtonsMenu = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 80%;
@@ -176,6 +215,71 @@ export const ContainerButtonsMenu = styled.div`
   }
 `;
 
+export const ContainerInfosProfile = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    margin-top: 5rem;
+  }
+`;
+
+export const BoxImageProfile = styled.div`
+  position: relative;
+  margin-top: 1rem;
+  left: 1rem;
+
+  .image_profile {
+    border-radius: 100%;
+    width: 35%;
+  }
+`;
+
+export const BoxTitleMenu = styled.div`
+  position: relative;
+  margin-top: 1.2rem;
+  left: 2rem;
+`;
+
+export const TitleMenu = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 600;
+`;
+
+export const BoxHr = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+`;
+
+export const Hr = styled.hr`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    width: 80%;
+  }
+`;
+
+export const BoxButtonLinksHeader = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  left: 2rem;
+`;
+
+export const BoxIconsButtonsHeader = styled.div``;
+
+export const IconsHeader = styled.div`
+  display: none;
+  font-size: 1.3rem;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
 export const Button = styled.button`
   color: #fff;
   margin-left: 15px;
@@ -187,13 +291,14 @@ export const Button = styled.button`
   }
 
   @media (max-width: 768px) {
+    position: relative;
     font-size: 19px;
     width: 100%;
-    text-align: center;
+    left: 1rem;
     margin-left: 0;
+    text-align: justify;
   }
 `;
-
 
 export const Content = styled.main`
   margin-top: 30px;

@@ -4,24 +4,44 @@ import { UserData } from "@/types/users";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter, usePathname } from "next/navigation";
 
-import { IoClose } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
+/* Agendamentos */
+import { GrSchedules } from "react-icons/gr";
+/* Servicos */
+import { AiOutlineContainer } from "react-icons/ai";
+/* Funcionarios */
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+/* Pagamentos */
+import { AiOutlineCreditCard } from "react-icons/ai";
+/* configuracoes */
+import { IoSettings } from "react-icons/io5";
+/* Notificacao */
+import { MdNotificationsActive } from "react-icons/md";
 
 import {
+  BoxButtonLinksHeader,
   BoxClosed,
   BoxElementsResume,
+  BoxHr,
+  BoxIconsButtonsHeader,
+  BoxImageProfile,
   BoxStatusAcconts,
+  BoxTitleMenu,
   Button,
   ButtonClosed,
   CardItem,
   CardLabel,
+  ContainerButtonHeaderBackMenu,
   ContainerButtonHeaderDashboard,
   ContainerButtonsMenu,
+  ContainerInfosProfile,
   ContainerResumeAndUrl,
   Content,
   CopyButton,
   DashboardContainer,
   Header,
+  Hr,
+  IconsHeader,
   ServiceDescription,
   ServiceItem,
   ServiceList,
@@ -32,12 +52,15 @@ import {
   StyledLink,
   SummaryCard,
   Title,
+  TitleMenu,
   TooltipContainer,
 } from "./styled";
 
-import { getUserData } from "@/hooks/useUsers";
+import { getImageProfileData, getUserData } from "@/hooks/useUsers";
 import { destroyCookie } from "nookies";
 import { Section, SectionTitle } from "./agendamentos/styled";
+import { ImagensProfilesProps } from "@/types/imagesProfiles";
+import Image from "next/image";
 
 const serviços = [
   { nome: "Corte de Cabelo", descrição: "Corte moderno e personalizado" },
@@ -59,6 +82,12 @@ export default function Dashboard() {
   const { data: dataUser } = useQuery<UserData>({
     queryKey: ["user", id],
     queryFn: () => getUserData(Array.isArray(id) ? id[0] : (id as string)),
+  });
+
+  const { data: dataImageProfile } = useQuery<ImagensProfilesProps[]>({
+    queryKey: ["ImageProfile", id],
+    queryFn: () =>
+      getImageProfileData(Array.isArray(id) ? id[0] : (id as string)),
   });
 
   const [menu, setMenu] = useState(false);
@@ -134,23 +163,101 @@ export default function Dashboard() {
 
         {!menu ? (
           <ContainerButtonHeaderDashboard onClick={handleMenu}>
-            <IoIosMenu className="visible" />
+              <IoIosMenu className="visible" />
           </ContainerButtonHeaderDashboard>
         ) : (
           <>
             <ContainerButtonsMenu className="visible">
-              <Button onClick={handleButtonAgendamento}>Agendamento</Button>
-              <Button onClick={handleButtonService}>Serviços</Button>
-              <Button onClick={handleButtonEmployees}>Funcionários</Button>
-              <Button onClick={handleButtonPayment}>Pagamentos</Button>
-              <Button onClick={handleButtonSettings}>Configuracões</Button>
+              <ContainerInfosProfile>
+                <BoxImageProfile>
+                  {dataImageProfile?.map((img) =>
+                    img.type === "profile" ? (
+                      <Image
+                        key={img._id}
+                        className="image_profile"
+                        src={img.url || "/default-profile.png"}
+                        alt={img.name || "Profile Image"}
+                        width={1000}
+                        height={1000}
+                      />
+                    ) : null
+                  )}
+                </BoxImageProfile>
+
+                <BoxTitleMenu>
+                  <TitleMenu>{dataUser?.name}</TitleMenu>
+                </BoxTitleMenu>
+
+                <BoxHr>
+                  <Hr />
+                </BoxHr>
+              </ContainerInfosProfile>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <GrSchedules />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonAgendamento}>Agendamento</Button>
+              </BoxButtonLinksHeader>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <AiOutlineContainer />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonService}>Serviços</Button>
+              </BoxButtonLinksHeader>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <AiOutlineUsergroupAdd />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonEmployees}>Funcionários</Button>
+              </BoxButtonLinksHeader>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <AiOutlineCreditCard />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonPayment}>Pagamentos</Button>
+              </BoxButtonLinksHeader>
+
+              <BoxHr>
+                <Hr />
+              </BoxHr>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <IoSettings />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonSettings}>Configuracões</Button>
+              </BoxButtonLinksHeader>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <MdNotificationsActive />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonSettings}>Notificações</Button>
+              </BoxButtonLinksHeader>
             </ContainerButtonsMenu>
-            <ContainerButtonHeaderDashboard
+
+            <ContainerButtonHeaderBackMenu
               onClick={handleMenu}
-              className="scale-out"
+              className="scale-out-back"
             >
-              <IoClose className="visible" />
-            </ContainerButtonHeaderDashboard>
+              <IoIosMenu className="visible" />
+            </ContainerButtonHeaderBackMenu>
           </>
         )}
       </Header>
@@ -174,10 +281,10 @@ export default function Dashboard() {
             </SummaryCard>
 
             <ContainerResumeAndUrl>
-                <CopyButton onClick={handleCopy}>
-                  {copied ? "Link copiado!" : "Copiar link"}
-                </CopyButton>
-                <StyledLink href={URL}>Página de Agendamento</StyledLink>
+              <CopyButton onClick={handleCopy}>
+                {copied ? "Link copiado!" : "Copiar link"}
+              </CopyButton>
+              <StyledLink href={URL}>Página de Agendamento</StyledLink>
             </ContainerResumeAndUrl>
           </BoxElementsResume>
         </Section>
