@@ -6,17 +6,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export const BoxButtunBack = styled.div`
-  display: flex;
-  justify-content: space-between;
-
-  @media (max-width: 768px) {
-  }
-`;
-
 export const ContainerTitle = styled.div`
   position: relative;
-  right: 15px;
   top: 20px;
   text-align: center;
   margin-bottom: 0.5rem;
@@ -156,7 +147,7 @@ export const BoxElements = styled.div``;
 
 export const BoxButtonDeleteService = styled.div``;
 
-export const ButtonDeleteService = styled.div`
+export const ButtonDeleteService = styled.button`
   color: crimson;
 `;
 
@@ -187,10 +178,6 @@ export const FormContainerWrapper = styled.div`
   border: 2px solid #4f5051;
   box-shadow: 30px 6px 100px rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease-in-out;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
 
   /* Ajuste para tablets e telas médias */
   @media (max-width: 768px) {
@@ -241,12 +228,14 @@ export const Input = styled.input`
 
 export const ContainerButton = styled.div`
   margin-top: 2rem;
+  margin-bottom: 0.3rem;
   display: flex;
   justify-content: center;
 `;
 
 export const Button = styled.button`
   padding: 0.9rem 2.5rem;
+  width: 100%;
   font-size: 1.1rem;
   background-color: #28a745;
   color: #ffffff;

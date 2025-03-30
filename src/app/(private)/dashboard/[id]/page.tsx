@@ -59,6 +59,7 @@ import {
 } from "./styled";
 
 import {
+  getEmployeesDataAll,
   getImageProfileData,
   getServiceData,
   getUserData,
@@ -73,6 +74,7 @@ import {
   BoxButtonDeleteService,
   ButtonDeleteService,
 } from "./service/styled";
+import { Employee } from "@/types/employees";
 
 export default function Dashboard() {
   const { id } = useParams();
@@ -95,6 +97,12 @@ export default function Dashboard() {
   const { data: dataServices, refetch } = useQuery<Services[]>({
     queryKey: ["Service", id],
     queryFn: () => getServiceData(Array.isArray(id) ? id[0] : (id as string)),
+  });
+
+  const { data: dataEmployees, refetch: employeesRefetch } = useQuery<Employee[]>({
+    queryKey: ["Employees", id],
+    queryFn: () =>
+      getEmployeesDataAll(Array.isArray(id) ? id[0] : (id as string)),
   });
 
   const [menu, setMenu] = useState(false);
@@ -149,6 +157,23 @@ export default function Dashboard() {
       }
     } catch {
       console.log("Erro ao deletar o serviço");
+    }
+  };
+
+  const deleteEmployes = async (employeesId: string) => {
+    console.log(employeesId);
+    try {
+      const response = await axios.delete(
+        `/employees/delete/${id}/${employeesId}`
+      );
+
+      await employeesRefetch();
+
+      if (response.status === 200) {
+        console.log("deletada com sucesso");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -337,6 +362,35 @@ export default function Dashboard() {
             ) : (
               <div>
                 <h1>Nenhum serviço cadastrado</h1>
+              </div>
+            )}
+          </ServiceList>
+        </Section>
+        <hr />
+
+        <Section>
+          <SectionTitle>Lista de Funcionários</SectionTitle>
+          <ServiceList>
+            {dataEmployees && dataEmployees.length > 0 ? (
+              dataEmployees?.map((employees) => (
+                <ServiceItem key={employees._id}>
+                  <BoxServiceItem>
+                    <BoxElements>
+                      <ServiceTitle>{employees.name}</ServiceTitle>
+                    </BoxElements>
+                    <BoxButtonDeleteService>
+                      <ButtonDeleteService
+                        onClick={() => deleteEmployes(employees._id)}
+                      >
+                        Delete
+                      </ButtonDeleteService>
+                    </BoxButtonDeleteService>
+                  </BoxServiceItem>
+                </ServiceItem>
+              ))
+            ) : (
+              <div>
+                <h1>Nenhum funcionário cadastrado</h1>
               </div>
             )}
           </ServiceList>

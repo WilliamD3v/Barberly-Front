@@ -3,7 +3,6 @@ import axios from "@/lib/axios";
 import { useState } from "react";
 import {
   Alert,
-  BoxButtunBack,
   Button,
   ContainerButton,
   ContainerForm,
@@ -16,10 +15,11 @@ import {
 } from "./styled";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import ButtonBack from "@/components/ButtonBack";
+import { LoadingBar } from "@/components/LoadingBar";
 
 export default function Service() {
   const { id } = useParams();
-  const router = useRouter()
+  const router = useRouter();
   const urlPathname = usePathname();
   const newUrl = urlPathname.replace("/service", "");
 
@@ -32,6 +32,9 @@ export default function Service() {
 
   const [alertError, setAlertError] = useState<string | null>(null);
   const [alertSuccess, setAlertSuccess] = useState<string | null>(null);
+
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const formatCurrency = (val: string) => {
     const num = val.replace(/\D/g, ""); // Remove tudo que não é número
@@ -71,24 +74,36 @@ export default function Service() {
       return;
     }
 
+    setLoading(true);
+    setProgress(0);
+
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev < 90 ? prev + 10 : prev));
+    }, 300);
+
     try {
       const response = await axios.post(`/services/register/${id}`, formData);
       if (response.status === 201) {
         setAlertSuccess("Serviço cadastrado com sucesso");
         setAlertError("");
 
-        router.push(newUrl)
+        router.push(newUrl);
       }
     } catch {
       setAlertError("Erro ao cadastrar serviço");
+    } finally {
+      clearInterval(interval); // Para a animação
+      setProgress(100); // Finaliza a barra
+      setTimeout(() => {
+        setLoading(false);
+        setProgress(0); // Reseta a barra após um tempo
+      }, 500);
     }
   };
 
   return (
     <>
-      <BoxButtunBack>
-        <ButtonBack url={newUrl} />
-      </BoxButtunBack>
+      <ButtonBack url={newUrl} />
 
       <ContainerTitle>
         <Title>Serviços</Title>
@@ -137,15 +152,16 @@ export default function Service() {
               onChange={handleChange}
             />
             <ContainerButton>
-              <Button onClick={handleSubmit}>Enviar</Button>
+              <Button onClick={handleSubmit} disabled={loading}>
+                {loading ? "Enviando..." : "Enviar"}
+              </Button>
             </ContainerButton>
+            {loading && <LoadingBar progress={progress} />}
           </ContainerForm>
 
           {alertError && <Alert isSuccess={false}>{alertError}</Alert>}
           {alertSuccess && <Alert isSuccess={true}>{alertSuccess}</Alert>}
         </FormContainerWrapper>
-
-        {/*         <ComponentsService id={id as string} profilePrivate={profilePrivate} /> */}
       </ContainerGeral>
     </>
   );

@@ -29,7 +29,7 @@ export const Title = styled.h1`
   }
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 1.2rem;
   }
 `;
 
@@ -46,14 +46,20 @@ export const Form = styled.form`
   box-shadow: 10px 6px 100px rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease-in-out;
 
-  &:hover {
-    transform: translateY(-5px);
+  @media (max-width: 768px) {
+    background-color: transparent;
+    box-shadow: 0px 0px 0px 0px;
+    padding: 0;
   }
 `;
 
 export const ContainerInput = styled.div`
   display: grid;
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    margin-top: 0px;
+  }
 `;
 
 export const TextName = styled.label`
@@ -63,6 +69,9 @@ export const TextName = styled.label`
   position: relative;
   left: 10px;
   margin-bottom: 0.1rem;
+
+  @media (max-width: 768px) {
+  }
 `;
 
 export const CardInput = styled.div`
@@ -92,6 +101,10 @@ export const ButtonHours = styled.button`
   background-color: #3e4245;
   color: #fff;
   border-radius: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const ContainerSpamHours = styled.div`
@@ -164,6 +177,7 @@ export const ContainerSelectdHours = styled.div`
 
 export const CheckboxContainer = styled.fieldset`
   display: flex; /* Alinha os itens lado a lado */
+  justify-content: center;
   padding: 0;
   border: none;
   margin-bottom: 20px;
@@ -177,24 +191,67 @@ export const CheckboxContainer = styled.fieldset`
     color: #ffffff;
     font-weight: 600;
     position: relative;
-    white-space: nowrap; /* Garante que a legenda não quebre linha */
+    white-space: nowrap;
   }
 `;
 
-export const CheckboxLabel = styled.label`
-  font-size: 1rem;
-  color: #ffffff;
+export const CheckboxLabel = styled.label<{ dia: string }>`
   display: flex;
+  flex-direction: column-reverse;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.7rem;
-  cursor: pointer;
+  text-align: center;
+  gap: 8px;
+  font-size: 16px;
+  margin: 0 12px;
+  margin-top: 20px;
 
-  input {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: #4caf50;
+  &::after {
+    content: "${(props) => props.dia}";
+    margin-bottom: 4px;
+    color: #ffff;
+    background-color: #28a745;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px;
+  }
+
+  @media (max-width: 600px) {
+    &::after {
+      content: "${(props) => props.dia.charAt(0)}";
+      font-size: 20px;
+    }
+  }
+`;
+
+export const BoxInputEmployees = styled.input.attrs({ type: "checkbox" })`
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffff;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+
+  &:checked {
+    border-color: #ffff;
+  }
+
+  &:checked::after {
+    content: "✅";
+    font-size: 100%;
+    position: absolute;
+    top: -4.7px;
+    left: -0.2rem;
+  }
+
+  &:hover {
+    border-color: #357abd;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 

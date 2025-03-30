@@ -19,33 +19,22 @@ import {
   TitleHours,
   ButtonHours,
   ContainerSelectdHours,
-  BoxListEmployees,
-  ContainerListEmployees,
-  NameEmployees,
-  ButtonEmployees,
-  ContainerButtonEmployees,
-  CardListEmployees,
+  BoxInputEmployees,
 } from "./styled";
 import axios from "@/lib/axios";
 import { useParams, usePathname } from "next/navigation";
 import { GlobalStyle } from "../service/styled";
-import { getEmployeesDataAll } from "@/hooks/useUsers";
-import { useQuery } from "@tanstack/react-query";
-import { Employee } from "@/types/employees";
 import ButtonBack from "@/components/ButtonBack";
+import { LoadingBar } from "@/components/LoadingBar";
 
 export default function EnviarDados() {
   const { id } = useParams();
   const urlPathname = usePathname();
   const newUrl = urlPathname.replace("/employees", "");
 
-  const { data: dataEmployees, refetch } = useQuery<Employee[]>({
-    queryKey: ["Service", id],
-    queryFn: () =>
-      getEmployeesDataAll(Array.isArray(id) ? id[0] : (id as string)),
-  });
-
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [diasSemIntervalo, setDiasSemIntervalo] = useState<string[]>([]);
 
   const [horarioInicioManhaSemIntervalo, setHorarioInicioManhaSemIntervalo] =
@@ -196,23 +185,6 @@ export default function EnviarDados() {
     ],
   };
 
-  const deleteEmployes = async (employeesId: string) => {
-    console.log(employeesId);
-    try {
-      const response = await axios.delete(
-        `/employees/delete/${id}/${employeesId}`
-      );
-
-      await refetch();
-
-      if (response.status === 200) {
-        console.log("deletada com sucesso");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -221,10 +193,15 @@ export default function EnviarDados() {
       return;
     }
 
+    setLoading(true);
+    setProgress(0);
+
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev < 90 ? prev + 10 : prev));
+    }, 300);
+
     try {
       const response = await axios.post(`/employees/register/${id}`, payload);
-
-      await refetch();
 
       if (response.status === 201) {
         console.log("Funcionário cadastrado com sucesso");
@@ -254,6 +231,13 @@ export default function EnviarDados() {
       setDiasSelecionadosMeioPeriodo({});
     } catch (error) {
       console.error("Erro ao cadastrar funcionário:", error);
+    } finally {
+      clearInterval(interval); // Para a animação
+      setProgress(100); // Finaliza a barra
+      setTimeout(() => {
+        setLoading(false);
+        setProgress(0); // Reseta a barra após um tempo
+      }, 500);
     }
   };
 
@@ -317,13 +301,12 @@ export default function EnviarDados() {
               <CheckboxContainer>
                 <legend>Sem Intervalo</legend>
                 {diasSemana.map((dia) => (
-                  <CheckboxLabel key={dia}>
-                    <input
+                  <CheckboxLabel key={dia} dia={dia}>
+                    <BoxInputEmployees
                       type="checkbox"
                       checked={!!diasSelecionadosSemIntervalo[dia]}
                       onChange={() => toggleDia(dia, "semIntervalo")}
                     />
-                    {dia}
                   </CheckboxLabel>
                 ))}
               </CheckboxContainer>
@@ -357,13 +340,12 @@ export default function EnviarDados() {
               <CheckboxContainer>
                 <legend>Com Intervalo</legend>
                 {diasSemana.map((dia) => (
-                  <CheckboxLabel key={dia}>
-                    <input
+                  <CheckboxLabel key={dia} dia={dia}>
+                    <BoxInputEmployees
                       type="checkbox"
                       checked={!!diasSelecionadosComIntervalo[dia]}
                       onChange={() => toggleDia(dia, "comIntervalo")}
                     />
-                    {dia}
                   </CheckboxLabel>
                 ))}
               </CheckboxContainer>
@@ -416,13 +398,12 @@ export default function EnviarDados() {
               <CheckboxContainer>
                 <legend>Meio Período</legend>
                 {diasSemana.map((dia) => (
-                  <CheckboxLabel key={dia}>
-                    <input
+                  <CheckboxLabel key={dia} dia={dia}>
+                    <BoxInputEmployees
                       type="checkbox"
                       checked={!!diasSelecionadosMeioPeriodo[dia]}
                       onChange={() => toggleDia(dia, "meioPeriodo")}
                     />
-                    {dia}
                   </CheckboxLabel>
                 ))}
               </CheckboxContainer>
@@ -446,32 +427,11 @@ export default function EnviarDados() {
             </ContainerSelectdHours>
           )}
 
-          <Button type="submit">Enviar Dados</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Enviando..." : "Enviar Dados"}
+          </Button>
+          {loading && <LoadingBar progress={progress} />}
         </Form>
-
-        <ContainerListEmployees>
-          <Title>Lista de Funcionários</Title>
-          <CardListEmployees>
-            {dataEmployees && dataEmployees.length > 0 ? (
-              dataEmployees.map((employee) => (
-                <BoxListEmployees key={employee._id}>
-                  <NameEmployees>{employee.name}</NameEmployees>
-                  <ContainerButtonEmployees>
-                    <ButtonEmployees
-                      onClick={() => deleteEmployes(employee._id)}
-                    >
-                      Deletar
-                    </ButtonEmployees>
-                  </ContainerButtonEmployees>
-                </BoxListEmployees>
-              ))
-            ) : (
-              <div className="flex justify-center">
-                <h1 className="text-white">Nenhum Funcionario</h1>
-              </div>
-            )}
-          </CardListEmployees>
-        </ContainerListEmployees>
       </Container>
     </>
   );
