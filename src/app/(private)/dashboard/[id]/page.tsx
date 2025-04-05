@@ -206,8 +206,12 @@ export default function Dashboard() {
       await refetch();
 
       setTypeMessage("success");
-    } catch {
-      console.log("Erro ao deletar o serviço");
+    } catch (error) {
+      const err = error as { response?: { data?: { message?: string } } };
+      setAlertMessagem(
+        err.response?.data?.message || "Erro ao atualizar produto!"
+      );
+      setTypeMessage("error");
     } finally {
       clearInterval(interval);
       setProgress(100);
