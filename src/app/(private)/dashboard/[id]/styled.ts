@@ -228,11 +228,39 @@ export const BoxImageProfile = styled.div`
   position: relative;
   margin-top: 1rem;
   left: 1rem;
+`;
 
-  .image_profile {
-    border-radius: 100%;
-    width: 35%;
+export const BoxImageProduct = styled.div`
+  align-items: center;
+
+  .image-product {
+    width: 100%;
+    height: 127px;
+    border-radius: 8px;
+    object-fit: contain;
+    object-position: center;
+    max-height: 200px;
+    margin-bottom: 20px;
   }
+`;
+
+export const BoxProductItem = styled.div`
+  margin-bottom: 5px;
+`;
+
+export const BoxButtonUpdel = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: end;
+`;
+
+export const ButtonUpdateProduct = styled.button`
+  font-size: 1.8rem;
+  color: #6b7279;
+`;
+export const ButtonDeleteProduct = styled.button`
+  font-size: 1.8rem;
+  color: #ba3f3f;
 `;
 
 export const BoxTitleMenu = styled.div`
@@ -298,6 +326,11 @@ export const Button = styled.button`
     margin-left: 0;
     text-align: justify;
   }
+`;
+
+export const BoxDescriptionCounter = styled.div`
+  display: flex;
+  width: 400%;
 `;
 
 export const Content = styled.main`
@@ -393,17 +426,28 @@ export const CardLabel = styled.p`
 `;
 
 export const ServiceList = styled.ul`
-  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  ); // aumentei pra 280px pra garantir quebra antes
+  gap: 20px;
+  list-style: none;
   padding: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export const ServiceItem = styled.li`
   background-color: #fff;
+  width: 100%; // <- aqui é o ponto chave
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
   font-size: 16px;
+  box-sizing: border-box;
 `;
 
 export const ServiceTitle = styled.h3`

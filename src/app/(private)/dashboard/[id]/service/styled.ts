@@ -143,12 +143,21 @@ export const BoxServiceItem = styled.div`
   align-items: center;
 `;
 
+export const BoxLoadingBar = styled.div`
+  position: relative;
+  top: 30px;
+`
+
 export const BoxElements = styled.div``;
 
-export const BoxButtonDeleteService = styled.div``;
+export const BoxButtonDeleteService = styled.div`
+  position: relative;
+  top: 5px;
+`;
 
 export const ButtonDeleteService = styled.button`
-  color: crimson;
+  font-size: 2rem;
+  color: #ba3f3f;
 `;
 
 export const Alert = styled.p<{ isSuccess: boolean }>`

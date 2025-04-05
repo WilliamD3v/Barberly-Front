@@ -19,18 +19,28 @@ import { AiOutlineCreditCard } from "react-icons/ai";
 import { IoSettings } from "react-icons/io5";
 /* Notificacao */
 import { MdNotificationsActive } from "react-icons/md";
+/* updata botao */
+import { MdOutlineSystemUpdateAlt } from "react-icons/md";
+/* delete botao */
+import { MdDeleteForever } from "react-icons/md";
 
 import {
   BoxButtonLinksHeader,
+  BoxButtonUpdel,
   BoxClosed,
+  BoxDescriptionCounter,
   BoxElementsResume,
   BoxHr,
   BoxIconsButtonsHeader,
+  BoxImageProduct,
   BoxImageProfile,
+  BoxProductItem,
   BoxStatusAcconts,
   BoxTitleMenu,
   Button,
   ButtonClosed,
+  ButtonDeleteProduct,
+  ButtonUpdateProduct,
   CardItem,
   CardLabel,
   ContainerButtonHeaderBackMenu,
@@ -61,6 +71,7 @@ import {
 import {
   getEmployeesDataAll,
   getImageProfileData,
+  getProduct,
   getServiceData,
   getUserData,
 } from "@/hooks/useUsers";
@@ -69,12 +80,15 @@ import { ImagensProfilesProps } from "@/types/imagesProfiles";
 import { Services } from "@/types/services";
 import axios from "@/lib/axios";
 import {
-  BoxServiceItem,
   BoxElements,
   BoxButtonDeleteService,
   ButtonDeleteService,
+  BoxServiceItem,
+  BoxLoadingBar,
 } from "./service/styled";
 import { Employee } from "@/types/employees";
+import { ProductProps } from "@/types/products";
+import { LoadingBar } from "@/components/LoadingBar";
 
 export default function Dashboard() {
   const { id } = useParams();
@@ -99,14 +113,27 @@ export default function Dashboard() {
     queryFn: () => getServiceData(Array.isArray(id) ? id[0] : (id as string)),
   });
 
-  const { data: dataEmployees, refetch: employeesRefetch } = useQuery<Employee[]>({
+  const { data: dataEmployees, refetch: employeesRefetch } = useQuery<
+    Employee[]
+  >({
     queryKey: ["Employees", id],
     queryFn: () =>
       getEmployeesDataAll(Array.isArray(id) ? id[0] : (id as string)),
   });
 
+  const { data: dataProduct, refetch: productRefetch } = useQuery<
+    ProductProps[]
+  >({
+    queryKey: ["Products", id],
+    queryFn: () => getProduct(Array.isArray(id) ? id[0] : (id as string)),
+  });
+
   const [menu, setMenu] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleMenu = () => {
     setMenu(!menu);
@@ -125,6 +152,10 @@ export default function Dashboard() {
 
   const handleButtonService = () => {
     router.push(`${pathname}/service`);
+  };
+
+  const handleButtonProduts = () => {
+    router.push(`${pathname}/produts`);
   };
 
   const handleButtonAgendamento = () => {
@@ -146,7 +177,19 @@ export default function Dashboard() {
     router.push("/");
   };
 
+  const handleUploadProduct = async (productId: string) => {
+    router.push(`${pathname}/produts?produt=${productId}`);
+  };
+
   const handleDeleteService = async (serviceId: string) => {
+    setLoadingId(serviceId);
+    setLoading(true);
+    setProgress(0);
+
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev < 90 ? prev + 10 : prev));
+    }, 300);
+
     try {
       const response = await axios.delete(
         `/services/delete/${id}/${serviceId}`
@@ -157,11 +200,26 @@ export default function Dashboard() {
       }
     } catch {
       console.log("Erro ao deletar o serviço");
+    } finally {
+      clearInterval(interval);
+      setProgress(100);
+      setTimeout(() => {
+        setLoadingId(null);
+        setLoading(false);
+        setProgress(0);
+      }, 500);
     }
   };
 
   const deleteEmployes = async (employeesId: string) => {
-    console.log(employeesId);
+    setLoadingId(employeesId);
+    setLoading(true);
+    setProgress(0);
+
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev < 90 ? prev + 10 : prev));
+    }, 300);
+
     try {
       const response = await axios.delete(
         `/employees/delete/${id}/${employeesId}`
@@ -174,6 +232,47 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      clearInterval(interval);
+      setProgress(100);
+      setTimeout(() => {
+        setLoadingId(null);
+        setLoading(false);
+        setProgress(0);
+      }, 500);
+    }
+  };
+
+  const handleDelete = async (productId: string) => {
+    setLoadingId(productId);
+    setLoading(true);
+    setProgress(0);
+
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev < 90 ? prev + 10 : prev));
+    }, 300);
+
+    try {
+      const response = await axios.delete(
+        `products/delete-product/${productId}`,
+        { timeout: 60000 }
+      );
+
+      if (response.status === 200) {
+        console.log("Produto deletado com sucesso");
+      }
+
+      await productRefetch();
+    } catch (error) {
+      console.log("Error ao deletar produto", error);
+    } finally {
+      clearInterval(interval);
+      setProgress(100);
+      setTimeout(() => {
+        setLoadingId(null);
+        setLoading(false);
+        setProgress(0);
+      }, 500);
     }
   };
 
@@ -255,6 +354,15 @@ export default function Dashboard() {
                   </IconsHeader>
                 </BoxIconsButtonsHeader>
                 <Button onClick={handleButtonService}>Serviços</Button>
+              </BoxButtonLinksHeader>
+
+              <BoxButtonLinksHeader>
+                <BoxIconsButtonsHeader>
+                  <IconsHeader>
+                    <AiOutlineContainer />
+                  </IconsHeader>
+                </BoxIconsButtonsHeader>
+                <Button onClick={handleButtonProduts}>Produtos</Button>
               </BoxButtonLinksHeader>
 
               <BoxButtonLinksHeader>
@@ -353,10 +461,15 @@ export default function Dashboard() {
                       <ButtonDeleteService
                         onClick={() => handleDeleteService(servico._id)}
                       >
-                        Delete
+                        <MdDeleteForever />
                       </ButtonDeleteService>
                     </BoxButtonDeleteService>
                   </BoxServiceItem>
+                  <BoxLoadingBar>
+                    {loadingId === servico._id && (
+                      <LoadingBar progress={progress} />
+                    )}
+                  </BoxLoadingBar>
                 </ServiceItem>
               ))
             ) : (
@@ -366,8 +479,79 @@ export default function Dashboard() {
             )}
           </ServiceList>
         </Section>
+
         <hr />
 
+        {/* Lista de produtos */}
+        <Section>
+          <SectionTitle>Produtos Disponíveis</SectionTitle>
+          <ServiceList>
+            {dataProduct && dataProduct.length > 0 ? (
+              dataProduct.map((product) => (
+                <ServiceItem key={product._id}>
+                  <BoxProductItem>
+                    <BoxImageProduct>
+                      <Image
+                        className="image-product"
+                        src={product.image.url}
+                        alt={product.image.name}
+                        width={1000}
+                        height={1000}
+                      />
+
+                      <BoxElements>
+                        <ServiceTitle>{product.name}</ServiceTitle>
+                        <BoxDescriptionCounter className="flex gap-3">
+                          <ServiceDescription>
+                            {product.description}
+                          </ServiceDescription>
+                          <ServiceDescription>
+                            <span>Qtn:</span>
+                            {product.counter}
+                          </ServiceDescription>
+                        </BoxDescriptionCounter>
+                      </BoxElements>
+                    </BoxImageProduct>
+
+                    <BoxButtonUpdel>
+                      <BoxButtonDeleteService>
+                        <ButtonUpdateProduct
+                          onClick={() => handleUploadProduct(product._id)}
+                          disabled={loading}
+                        >
+                          <MdOutlineSystemUpdateAlt />
+                        </ButtonUpdateProduct>
+                      </BoxButtonDeleteService>
+
+                      <BoxButtonDeleteService>
+                        <ButtonDeleteProduct
+                          onClick={() => handleDelete(product._id)}
+                          disabled={loading}
+                        >
+                          <MdDeleteForever />
+                        </ButtonDeleteProduct>
+                      </BoxButtonDeleteService>
+                    </BoxButtonUpdel>
+                  </BoxProductItem>
+
+                  {loadingId === product._id && (
+                    <BoxLoadingBar>
+                      <LoadingBar progress={progress} />
+                    </BoxLoadingBar>
+                  )}
+                </ServiceItem>
+              ))
+            ) : (
+              <div>
+                <h1>Nenhum Produto cadastrado</h1>
+              </div>
+            )}
+          </ServiceList>
+        </Section>
+
+        <hr />
+
+        {/* Lista de funcionarios */}
         <Section>
           <SectionTitle>Lista de Funcionários</SectionTitle>
           <ServiceList>
@@ -382,10 +566,15 @@ export default function Dashboard() {
                       <ButtonDeleteService
                         onClick={() => deleteEmployes(employees._id)}
                       >
-                        Delete
+                        <MdDeleteForever />
                       </ButtonDeleteService>
                     </BoxButtonDeleteService>
                   </BoxServiceItem>
+                  <BoxLoadingBar>
+                    {loadingId === employees._id && (
+                      <LoadingBar progress={progress} />
+                    )}
+                  </BoxLoadingBar>
                 </ServiceItem>
               ))
             ) : (
@@ -399,11 +588,10 @@ export default function Dashboard() {
 
       <hr />
 
+      {/* Button de sair */}
       <BoxClosed>
         <ButtonClosed onClick={handleRemoveCookies}>Sair</ButtonClosed>
       </BoxClosed>
-
-      {/*       <ComponentsService id={id as string} profilePrivate={profilePrivate}/> */}
     </DashboardContainer>
   );
 }

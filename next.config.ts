@@ -6,6 +6,8 @@ const nextConfig = {
       "encrypted-tbn0.gstatic.com",
       "i.pinimg.com",
       "res.cloudinary.com",
+      "unpkg.com",
+      "source.unsplash.com",
     ],
   },
 };

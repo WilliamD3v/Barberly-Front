@@ -183,3 +183,15 @@ export const ServiceContainer = styled.div`
   box-shadow: 30px 6px 100px rgba(255, 255, 255, 0.2);
 `;
 
+
+/* Mapa */
+export const ContainerMap = styled.div`
+  width: 50%;
+`
+
+export const BoxElementsStreetNumber = styled.div`
+  display: flex;
+`
+export const BoxElementsCityNeighborhood = styled.div`
+  display: flex;
+`

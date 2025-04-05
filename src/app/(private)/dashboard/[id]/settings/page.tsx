@@ -30,11 +30,20 @@ import {
   ButtonToggle,
   BoxButtonToggle,
 } from "./styled";
+import { getImageProfileData } from "@/hooks/useUsers";
+import { ImagensProfilesProps } from "@/types/imagesProfiles";
+import { useQuery } from "@tanstack/react-query";
 
 export default function SettingsPage() {
   const { id } = useParams();
   const router = useRouter();
   const urlPathname = usePathname();
+
+  const { data: dataImageProfile } = useQuery<ImagensProfilesProps[]>({
+    queryKey: ["ImageProfile", id],
+    queryFn: () =>
+      getImageProfileData(Array.isArray(id) ? id[0] : (id as string)),
+  });
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [bannerImage, setBannerImage] = useState<string | null>(null);
@@ -96,7 +105,7 @@ export default function SettingsPage() {
     <>
       <BoxButtonToggle>
         <ButtonToggle onClick={handleButtonVisible}>
-          {isVisible ? <IoMenu/> : <IoClose/>}
+          {isVisible ? <IoMenu /> : <IoClose />}
         </ButtonToggle>
       </BoxButtonToggle>
 
@@ -117,17 +126,43 @@ export default function SettingsPage() {
       <Container>
         {/* Sidebar */}
         <Content>
-          <ContainerPreview>
-            <TitelPreview>Prévia da Imagem</TitelPreview>
-          </ContainerPreview>
+          {dataImageProfile && dataImageProfile.length > 0 ? (
+            <ContainerPreview>
+              <TitelPreview>Suas Imagems</TitelPreview>
+            </ContainerPreview>
+          ) : (
+            <ContainerPreview>
+              <TitelPreview>Prévia da Imagem</TitelPreview>
+            </ContainerPreview>
+          )}
 
           <PreviewBox>
             <PreviewContainer>
-              {bannerImage && (
-                <BannerPreview src={bannerImage} alt="Banner Preview" />
-              )}
-              {profileImage && (
-                <ProfilePreview src={profileImage} alt="Profile Preview" />
+              {dataImageProfile && dataImageProfile.length > 0 ? (
+                dataImageProfile.map((image) => (
+                  <>
+                    {image.type === "banner" && (
+                      <BannerPreview src={image.url} alt={image.name} />
+                    )}
+                    {image.type === "profile" && (
+                      <ProfilePreview src={image.url} alt={image.name} />
+                    )}
+                  </>
+                ))
+              ) : (
+                <PreviewBox>
+                  <PreviewContainer>
+                    {bannerImage && (
+                      <BannerPreview src={bannerImage} alt="Banner Preview" />
+                    )}
+                    {profileImage && (
+                      <ProfilePreview
+                        src={profileImage}
+                        alt="Profile Preview"
+                      />
+                    )}
+                  </PreviewContainer>
+                </PreviewBox>
               )}
             </PreviewContainer>
           </PreviewBox>

@@ -17,20 +17,35 @@ export const getUserData = async (_id?: string) => {
   }
 };
 
+/* Dados de endereços da barbearia */
+export const getAddress = async (_id?: string) => {
+  if (!_id) {
+    console.warn("Os dados do endereço estao temporariamente indisponiveis");
+    return null;
+  }
+
+  try {
+    const response = await axios.get(`address/get-address/${_id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar endereço", error);
+  }
+};
+
 /* Dados de imagens de perfil da barbearia */
 export const getImageProfileData = async (_id?: string) => {
   if (!_id) {
     console.warn(
-      "Os dados de de imagens de perfil estao temporariamente indisponiveis"
+      "Os dados de imagens de perfil estao temporariamente indisponiveis"
     );
-    return null
+    return null;
   }
 
   try {
-    const response = await axios.get(`upload/get-image/${_id}`)
-    return response.data
+    const response = await axios.get(`upload/get-image/${_id}`);
+    return response.data;
   } catch (error) {
-    console.error("Error ao buscar imagens de perfil", error)
+    console.error("Error ao buscar imagens de perfil", error);
   }
 };
 
@@ -65,6 +80,20 @@ export const getEmployeesDataAll = async (_id?: string) => {
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar todos funcionarios", error);
+  }
+};
+
+export const getProduct = async (_id?: string) => {
+  if (!_id) {
+    console.warn("Os dados dos produtos estao temporariamente indisponiveis");
+    return null;
+  }
+
+  try {
+    const response = await axios.get(`products/get-product/${_id}`)
+    return response.data
+  } catch (error) {
+    console.error("Error ao buscar todos os produtos de usuarios", error)
   }
 };
 

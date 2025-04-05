@@ -5,9 +5,10 @@ import { ContainerButtonBack, ButtonBackStyled } from "./styled";
 
 interface ButtonBackProps {
   url: string;
+  disabledStatus?: boolean
 }
 
-export default function ButtonBack({ url }: ButtonBackProps) {
+export default function ButtonBack({ url, disabledStatus }: ButtonBackProps) {
   const router = useRouter();
 
   const handleButtonBack = () => {
@@ -16,7 +17,7 @@ export default function ButtonBack({ url }: ButtonBackProps) {
 
   return (
     <ContainerButtonBack>
-      <ButtonBackStyled onClick={handleButtonBack}>
+      <ButtonBackStyled onClick={handleButtonBack} disabled={disabledStatus}>
         <MdArrowBack />
       </ButtonBackStyled>
     </ContainerButtonBack>

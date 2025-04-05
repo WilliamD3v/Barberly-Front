@@ -92,11 +92,11 @@ export default function Service() {
     } catch {
       setAlertError("Erro ao cadastrar serviço");
     } finally {
-      clearInterval(interval); // Para a animação
-      setProgress(100); // Finaliza a barra
+      clearInterval(interval);
+      setProgress(100);
       setTimeout(() => {
         setLoading(false);
-        setProgress(0); // Reseta a barra após um tempo
+        setProgress(0);
       }, 500);
     }
   };

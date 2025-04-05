@@ -23,8 +23,11 @@ import {
   TextRedirect,
   StyledLink,
 } from "./styled";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -55,7 +58,7 @@ export default function Register() {
       }
 
       if (formData.password !== formData.confirmPassword) {
-        setMessage("Senha não confirmada!")
+        setMessage("Senha não confirmada!");
       }
 
       const response = await axios.post("user/register", formData);
@@ -69,6 +72,10 @@ export default function Register() {
           confirmPassword: "",
           phone: "",
         });
+
+        const { data } = response
+
+        router.push(`/dashboard/${data._id}/address`);
       }
     } catch {
       setMessage("Ocorreu um erro ao cadastrar o usuário.");
@@ -157,9 +164,7 @@ export default function Register() {
         <ContainerRedirect>
           <TextRedirect>
             Já tem uma conta?{" "}
-            <StyledLink href="/login">
-              Faça o login!
-            </StyledLink>
+            <StyledLink href="/login">Faça o login!</StyledLink>
           </TextRedirect>
         </ContainerRedirect>
       </Card>

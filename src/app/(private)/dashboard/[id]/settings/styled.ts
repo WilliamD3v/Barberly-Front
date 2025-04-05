@@ -7,7 +7,8 @@ export const Container = styled.div`
 `;
 
 export const BoxButtonToggle = styled.div`
-  display: none;
+  display: flex;
+  justify-content: end;
 
   @media (max-width: 768px) {
     display: flex;
@@ -30,12 +31,16 @@ export const ButtonToggle = styled.button`
 `;
 
 export const Sidebar = styled.div`
-  width: 250px;
   background: #2c3e50;
   color: white;
   display: flex;
   flex-direction: column;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  height: 100%;
   padding: 20px;
+
 
   @media (max-width: 768px) {
     position: fixed;
