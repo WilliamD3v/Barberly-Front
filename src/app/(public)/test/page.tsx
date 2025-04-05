@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import dynamic from "next/dynamic";
+/* import dynamic from "next/dynamic"; */
 import { FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { MapContainer } from "react-leaflet";
 import {
@@ -24,7 +24,7 @@ import {
   GlobalStyle,
 } from "./styled";
 
-const Map = dynamic(() => import("@/components/Map"));
+/* const Map = dynamic(() => import("@/components/Map")); */
 
 const ProfilePage = () => {
   return (
@@ -75,7 +75,7 @@ const ProfilePage = () => {
           <FaClock /> Segunda a Sábado - 09h às 20h
         </LocationInfo>
         <MapContainer>
-          <Map latitude={-23.55052} longitude={-46.633308} />
+{/*           <Map latitude={-23.55052} longitude={-46.633308} /> */}
         </MapContainer>
       </LocationSection>
     </Container>
