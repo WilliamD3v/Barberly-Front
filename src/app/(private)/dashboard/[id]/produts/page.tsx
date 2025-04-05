@@ -34,6 +34,7 @@ import ButtonBack from "@/components/ButtonBack";
 import { getProduct } from "@/hooks/useUsers";
 import { ProductProps } from "@/types/products";
 import { LoadingBar } from "@/components/LoadingBar";
+import { FloatingMessage } from "@/components/FloatingMessage";
 
 export default function Products() {
   const { id } = useParams();
@@ -52,6 +53,9 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [counter, setCounter] = useState<number>(0);
+  const [typeMessage, setTypeMessage] = useState("")
+  const [alertMessagem, setAlertMessagem] = useState("");
+  const [messageBoolean, setMessageBoolean] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [showCropper, setShowCropper] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -184,7 +188,7 @@ export default function Products() {
         );
 
         if (response.status === 200) {
-          console.log("Produto cadastrado com sucesso!");
+          setAlertMessagem("Produto cadastrado com sucesso!");
         }
 
         await refetch();
@@ -195,14 +199,20 @@ export default function Products() {
           price: 0,
         });
         setCounter(0);
+        setImage(null);
         setSelectedFile(null);
         setCroppedImage(null);
-        setImage(null)
+        setTypeMessage("success")
       } catch (error) {
-        console.log("Erro ao cadastrar produto!", error);
+        const err = error as { response?: { data?: { message?: string } } };
+        setAlertMessagem(
+          err.response?.data?.message || "Erro ao atualizar produto!"
+        );
+        setTypeMessage("error")
       } finally {
         clearInterval(interval);
         setProgress(100);
+        setMessageBoolean(true)
         setTimeout(() => {
           setLoading(false);
           setProgress(0);
@@ -237,12 +247,15 @@ export default function Products() {
         );
 
         if (response.status === 200) {
-          console.log("Produto atualizado com sucesso");
+          setAlertMessagem("Produto atualizado com sucesso");
         }
 
         await refetch();
       } catch (error) {
-        console.log("Erro ao atualizar o produto!", error);
+        const err = error as { response?: { data?: { message?: string } } };
+        console.log(
+          err.response?.data?.message || "Erro ao atualizar produto!"
+        );
       } finally {
         clearInterval(interval);
         setProgress(100);
@@ -363,6 +376,14 @@ export default function Products() {
           </CropButtonContainer>
         </CropContainer>
       )}
+
+      <FloatingMessage
+        message={alertMessagem}
+        show={messageBoolean}
+        duration={5000}
+        onClose={() => setMessageBoolean(false)}
+        type={typeMessage}
+      />
     </>
   );
 }

@@ -330,7 +330,7 @@ export const Button = styled.button`
 
 export const BoxDescriptionCounter = styled.div`
   display: flex;
-  width: 400%;
+  width: 100%;
 `;
 
 export const Content = styled.main`

@@ -89,6 +89,7 @@ import {
 import { Employee } from "@/types/employees";
 import { ProductProps } from "@/types/products";
 import { LoadingBar } from "@/components/LoadingBar";
+import { FloatingMessage } from "@/components/FloatingMessage";
 
 export default function Dashboard() {
   const { id } = useParams();
@@ -132,6 +133,9 @@ export default function Dashboard() {
   const [copied, setCopied] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [typeMessage, setTypeMessage] = useState("");
+  const [alertMessagem, setAlertMessagem] = useState("");
+  const [messageBoolean, setMessageBoolean] = useState(false);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
 
@@ -194,15 +198,20 @@ export default function Dashboard() {
       const response = await axios.delete(
         `/services/delete/${id}/${serviceId}`
       );
+
       if (response.status === 201) {
-        console.log("Serviço deletado com sucesso");
-        refetch();
+        setAlertMessagem("Serviço deletado com sucesso");
       }
+
+      await refetch();
+
+      setTypeMessage("success");
     } catch {
       console.log("Erro ao deletar o serviço");
     } finally {
       clearInterval(interval);
       setProgress(100);
+      setMessageBoolean(true);
       setTimeout(() => {
         setLoadingId(null);
         setLoading(false);
@@ -227,14 +236,21 @@ export default function Dashboard() {
 
       await employeesRefetch();
 
-      if (response.status === 200) {
-        console.log("deletada com sucesso");
+      if (response.status === 201) {
+        setAlertMessagem("Funcionário deletado com sucesso");
       }
+
+      setTypeMessage("success");
     } catch (error) {
-      console.log(error);
+      const err = error as { response?: { data?: { message?: string } } };
+      setAlertMessagem(
+        err.response?.data?.message || "Erro ao atualizar produto!"
+      );
+      setTypeMessage("error");
     } finally {
       clearInterval(interval);
       setProgress(100);
+      setMessageBoolean(true);
       setTimeout(() => {
         setLoadingId(null);
         setLoading(false);
@@ -258,16 +274,23 @@ export default function Dashboard() {
         { timeout: 60000 }
       );
 
-      if (response.status === 200) {
-        console.log("Produto deletado com sucesso");
+      if (response.status === 201) {
+        setAlertMessagem("Produto deletado com sucesso");
       }
 
       await productRefetch();
+
+      setTypeMessage("success");
     } catch (error) {
-      console.log("Error ao deletar produto", error);
+      const err = error as { response?: { data?: { message?: string } } };
+      setAlertMessagem(
+        err.response?.data?.message || "Erro ao atualizar produto!"
+      );
+      setTypeMessage("error");
     } finally {
       clearInterval(interval);
       setProgress(100);
+      setMessageBoolean(true);
       setTimeout(() => {
         setLoadingId(null);
         setLoading(false);
@@ -587,6 +610,14 @@ export default function Dashboard() {
       </Content>
 
       <hr />
+
+      <FloatingMessage
+        message={alertMessagem}
+        show={messageBoolean}
+        duration={5000}
+        onClose={() => setMessageBoolean(false)}
+        type={typeMessage}
+      />
 
       {/* Button de sair */}
       <BoxClosed>
