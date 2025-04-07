@@ -1,6 +1,6 @@
 "use client";
 import axios from "@/lib/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -13,15 +13,30 @@ import {
   Input,
   Title,
 } from "./styled";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import ButtonBack from "@/components/ButtonBack";
 import { LoadingBar } from "@/components/LoadingBar";
+import { getServiceData } from "@/hooks/useUsers";
+import { Services } from "@/types/services";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Service() {
   const { id } = useParams();
   const router = useRouter();
   const urlPathname = usePathname();
   const newUrl = urlPathname.replace("/service", "");
+  const searchParams = useSearchParams();
+  const serviceId = searchParams.get("serviceId");
+
+  const { data: dataServices } = useQuery<Services[]>({
+    queryKey: ["Service", id],
+    queryFn: () => getServiceData(Array.isArray(id) ? id[0] : (id as string)),
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -29,12 +44,45 @@ export default function Service() {
     description: "",
     duration: "",
   });
+  const [originalData, setOriginalData] = useState<typeof formData | null>(
+    null
+  );
 
   const [alertError, setAlertError] = useState<string | null>(null);
   const [alertSuccess, setAlertSuccess] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (serviceId && dataServices) {
+      const selectedService = dataServices?.find(
+        (serv) => serv._id === serviceId
+      );
+
+      if (selectedService) {
+        const formatted = {
+          name: selectedService.name,
+          price: selectedService.price,
+          description: selectedService.description,
+          duration: String(selectedService.duration),
+        };
+
+        setFormData(formatted);
+        setOriginalData(formatted); // salva dados originais
+      }
+    }
+  }, [serviceId, dataServices]);
+
+  const isFormModified = () => {
+    if (!originalData) return true; // considera modificado se não houver original
+    return (
+      formData.name !== originalData.name ||
+      formData.price !== originalData.price ||
+      formData.description !== originalData.description ||
+      formData.duration !== originalData.duration
+    );
+  };
 
   const formatCurrency = (val: string) => {
     const num = val.replace(/\D/g, ""); // Remove tudo que não é número
@@ -54,24 +102,26 @@ export default function Service() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name) {
-      setAlertError("Nome obrigatório!");
-      return;
-    }
+    if (!serviceId) {
+      if (!formData.name) {
+        setAlertError("Nome obrigatório!");
+        return;
+      }
 
-    if (formData.price === 0) {
-      setAlertError("Valor obrigatório!");
-      return;
-    }
+      if (formData.price === 0) {
+        setAlertError("Valor obrigatório!");
+        return;
+      }
 
-    if (!formData.description) {
-      setAlertError("Descrição obrigatória!");
-      return;
-    }
+      if (!formData.description) {
+        setAlertError("Descrição obrigatória!");
+        return;
+      }
 
-    if (!formData.duration) {
-      setAlertError("Duração obrigatória!");
-      return;
+      if (!formData.duration) {
+        setAlertError("Duração obrigatória!");
+        return;
+      }
     }
 
     setLoading(true);
@@ -82,15 +132,32 @@ export default function Service() {
     }, 300);
 
     try {
-      const response = await axios.post(`/services/register/${id}`, formData);
-      if (response.status === 201) {
-        setAlertSuccess("Serviço cadastrado com sucesso");
-        setAlertError("");
+      let response;
 
-        router.push(newUrl);
+      if (serviceId) {
+        if (serviceId) {
+          if (!isFormModified()) {
+            setAlertError("Nenhuma alteração detectada.");
+            return;
+          }
+        }
+
+        response = await axios.put(`/services/update-service/${serviceId}`, formData);
+        if (response.status === 200) {
+          setAlertSuccess("Serviço atualizado com sucesso");
+          setAlertError("");
+        }
+      } else {
+        response = await axios.post(`/services/register/${id}`, formData);
+        if (response.status === 201) {
+          setAlertSuccess("Serviço cadastrado com sucesso");
+          setAlertError("");
+        }
       }
+
+      router.push(newUrl);
     } catch {
-      setAlertError("Erro ao cadastrar serviço");
+      setAlertError("Erro ao salvar serviço");
     } finally {
       clearInterval(interval);
       setProgress(100);
@@ -119,6 +186,7 @@ export default function Service() {
               name="name"
               id="name"
               placeholder="Nome:"
+              value={formData.name}
               onChange={handleChange}
             />
             <Input
@@ -142,6 +210,7 @@ export default function Service() {
               name="duration"
               id="duration"
               placeholder="Duração:"
+              value={formData.duration}
               onChange={handleChange}
             />
             <Input
@@ -149,6 +218,7 @@ export default function Service() {
               name="description"
               id="description"
               placeholder="Descrição:"
+              value={formData.description}
               onChange={handleChange}
             />
             <ContainerButton>
@@ -159,8 +229,8 @@ export default function Service() {
             {loading && <LoadingBar progress={progress} />}
           </ContainerForm>
 
-          {alertError && <Alert isSuccess={false}>{alertError}</Alert>}
-          {alertSuccess && <Alert isSuccess={true}>{alertSuccess}</Alert>}
+          <Alert $isSuccess={true}>{alertSuccess}</Alert>
+          <Alert $isSuccess={false}>{alertError}</Alert>
         </FormContainerWrapper>
       </ContainerGeral>
     </>

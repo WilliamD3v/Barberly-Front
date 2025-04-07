@@ -425,6 +425,72 @@ export const CardLabel = styled.p`
   }
 `;
 
+export const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const FloatingServiceCard = styled.div`
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 1000;
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #000;
+  }
+`;
+
+export const ServiceInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    color: #222;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #666;
+  }
+
+  .value {
+    font-size: 1.1rem;
+    color: #333;
+  }
+`;
+
 export const ServiceList = styled.ul`
   display: grid;
   grid-template-columns: repeat(

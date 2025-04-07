@@ -1,3 +1,4 @@
+"use client";
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
@@ -146,7 +147,7 @@ export const BoxServiceItem = styled.div`
 export const BoxLoadingBar = styled.div`
   position: relative;
   top: 30px;
-`
+`;
 
 export const BoxElements = styled.div``;
 
@@ -160,9 +161,9 @@ export const ButtonDeleteService = styled.button`
   color: #ba3f3f;
 `;
 
-export const Alert = styled.p<{ isSuccess: boolean }>`
+export const Alert = styled.p<{ $isSuccess: boolean }>`
   margin-top: 10px;
-  color: ${(props) => (props.isSuccess ? "#28a745" : "#e74c3c")};
+  color: ${(props) => (props.$isSuccess ? "#28a745" : "#e74c3c")};
   font-size: 1.2rem;
   font-weight: 600;
   text-align: center;

@@ -43,6 +43,7 @@ import {
   ButtonUpdateProduct,
   CardItem,
   CardLabel,
+  CloseButton,
   ContainerButtonHeaderBackMenu,
   ContainerButtonHeaderDashboard,
   ContainerButtonsMenu,
@@ -51,10 +52,13 @@ import {
   Content,
   CopyButton,
   DashboardContainer,
+  FloatingServiceCard,
   Header,
   Hr,
   IconsHeader,
+  Overlay,
   ServiceDescription,
+  ServiceInfo,
   ServiceItem,
   ServiceList,
   ServiceTitle,
@@ -139,6 +143,17 @@ export default function Dashboard() {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
 
+  const [selectedServices, setSelectedServices] = useState<Services>();
+  const [isViewSelectedService, setIsViewSelectedService] = useState(false);
+
+  const handleSelectService = (serviceId: string) => {
+    if (serviceId) {
+      const serviceSelectds = dataServices?.find((s) => s._id === serviceId);
+      setSelectedServices(serviceSelectds);
+    }
+    setIsViewSelectedService(true);
+  };
+
   const handleMenu = () => {
     setMenu(!menu);
   };
@@ -183,6 +198,10 @@ export default function Dashboard() {
 
   const handleUploadProduct = async (productId: string) => {
     router.push(`${pathname}/produts?produt=${productId}`);
+  };
+
+  const handleUploadService = async (serviceId: string) => {
+    router.push(`${pathname}/service?serviceId=${serviceId}`);
   };
 
   const handleDeleteService = async (serviceId: string) => {
@@ -470,13 +489,77 @@ export default function Dashboard() {
           </BoxElementsResume>
         </Section>
 
+        {isViewSelectedService ? (
+          <Overlay>
+            <FloatingServiceCard>
+              <CloseButton onClick={() => setIsViewSelectedService(false)}>
+                ×
+              </CloseButton>
+
+              <ServiceInfo>
+                <h2>{selectedServices?.name}</h2>
+
+                <div className="info-item">
+                  <span className="label">Descrição</span>
+                  <span className="value">{selectedServices?.description}</span>
+                </div>
+
+                <div className="info-item">
+                  <span className="label">Preço</span>
+                  <span className="value">
+                    R$ {selectedServices?.price.toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="info-item">
+                  <span className="label">Duração</span>
+                  <span className="value">
+                    {selectedServices?.duration} minutos
+                  </span>
+                </div>
+
+                <BoxButtonUpdel>
+                  <BoxButtonDeleteService>
+                    <ButtonUpdateProduct
+                      onClick={() => {
+                        if (selectedServices?._id) {
+                          handleUploadService(selectedServices._id);
+                        }
+                      }}
+                      disabled={loading}
+                    >
+                      <MdOutlineSystemUpdateAlt />
+                    </ButtonUpdateProduct>
+                  </BoxButtonDeleteService>
+
+                  <BoxButtonDeleteService>
+                    <ButtonDeleteProduct
+                      onClick={() => {
+                        if (selectedServices?._id) {
+                          handleUploadService(selectedServices._id);
+                        }
+                      }}
+                      disabled={loading}
+                    >
+                      <MdDeleteForever />
+                    </ButtonDeleteProduct>
+                  </BoxButtonDeleteService>
+                </BoxButtonUpdel>
+              </ServiceInfo>
+            </FloatingServiceCard>
+          </Overlay>
+        ) : null}
+
         {/* Lista de Serviços */}
         <Section>
           <SectionTitle>Serviços Disponíveis</SectionTitle>
           <ServiceList>
             {dataServices && dataServices.length > 0 ? (
               dataServices.map((servico) => (
-                <ServiceItem key={servico._id}>
+                <ServiceItem
+                  key={servico._id}
+                  onClick={() => handleSelectService(servico._id)}
+                >
                   <BoxServiceItem>
                     <BoxElements>
                       <ServiceTitle>{servico.name}</ServiceTitle>
@@ -484,14 +567,28 @@ export default function Dashboard() {
                         {servico.description}
                       </ServiceDescription>
                     </BoxElements>
-                    <BoxButtonDeleteService>
-                      <ButtonDeleteService
-                        onClick={() => handleDeleteService(servico._id)}
-                      >
-                        <MdDeleteForever />
-                      </ButtonDeleteService>
-                    </BoxButtonDeleteService>
+
+                    <BoxButtonUpdel>
+                      <BoxButtonDeleteService>
+                        <ButtonUpdateProduct
+                          onClick={() => handleUploadService(servico._id)}
+                          disabled={loading}
+                        >
+                          <MdOutlineSystemUpdateAlt />
+                        </ButtonUpdateProduct>
+                      </BoxButtonDeleteService>
+
+                      <BoxButtonDeleteService>
+                        <ButtonDeleteProduct
+                          onClick={() => handleDeleteService(servico._id)}
+                          disabled={loading}
+                        >
+                          <MdDeleteForever />
+                        </ButtonDeleteProduct>
+                      </BoxButtonDeleteService>
+                    </BoxButtonUpdel>
                   </BoxServiceItem>
+
                   <BoxLoadingBar>
                     {loadingId === servico._id && (
                       <LoadingBar progress={progress} />
