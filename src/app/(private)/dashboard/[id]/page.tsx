@@ -86,7 +86,6 @@ import axios from "@/lib/axios";
 import {
   BoxElements,
   BoxButtonDeleteService,
-  ButtonDeleteService,
   BoxServiceItem,
   BoxLoadingBar,
 } from "./service/styled";
@@ -194,6 +193,10 @@ export default function Dashboard() {
     destroyCookie(null, "nextauth.userId", { path: "/" });
 
     router.push("/");
+  };
+
+  const handleUploadEmployees = async (productId: string) => {
+    router.push(`${pathname}/employees?employeesId=${productId}`);
   };
 
   const handleUploadProduct = async (productId: string) => {
@@ -686,14 +689,27 @@ export default function Dashboard() {
                     <BoxElements>
                       <ServiceTitle>{employees.name}</ServiceTitle>
                     </BoxElements>
-                    <BoxButtonDeleteService>
-                      <ButtonDeleteService
-                        onClick={() => deleteEmployes(employees._id)}
-                      >
-                        <MdDeleteForever />
-                      </ButtonDeleteService>
-                    </BoxButtonDeleteService>
+                    <BoxButtonUpdel>
+                      <BoxButtonDeleteService>
+                        <ButtonUpdateProduct
+                          onClick={() => handleUploadEmployees(employees._id)}
+                          disabled={loading}
+                        >
+                          <MdOutlineSystemUpdateAlt />
+                        </ButtonUpdateProduct>
+                      </BoxButtonDeleteService>
+
+                      <BoxButtonDeleteService>
+                        <ButtonDeleteProduct
+                          onClick={() => deleteEmployes(employees._id)}
+                          disabled={loading}
+                        >
+                          <MdDeleteForever />
+                        </ButtonDeleteProduct>
+                      </BoxButtonDeleteService>
+                    </BoxButtonUpdel>
                   </BoxServiceItem>
+
                   <BoxLoadingBar>
                     {loadingId === employees._id && (
                       <LoadingBar progress={progress} />

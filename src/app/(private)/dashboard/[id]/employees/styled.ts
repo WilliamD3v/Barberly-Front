@@ -175,16 +175,35 @@ export const ContainerSelectdHours = styled.div`
   overflow: hidden;
 `;
 
+export const BoxModHoursText = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+export const ModHoursText = styled.legend`
+  font-size: 20px;
+  color: #ffff;
+  font-weight: 700;
+`;
+
+export const ModHoursIcon = styled.span<{ mode: string }>`
+  position: relative;
+  font-size: 20px;
+  color: ${({ mode }) =>
+    mode === "semIntervalo" ? "#28A745" : mode === "comIntervalo" ? "#C5DE35" : "#9E1E1E"};
+`;
+
 export const CheckboxContainer = styled.fieldset`
-  display: flex; /* Alinha os itens lado a lado */
+  display: flex;
   justify-content: center;
   padding: 0;
   border: none;
   margin-bottom: 20px;
-  width: 100%; /* Ocupe toda a largura disponível */
-  align-items: center; /* Centraliza os itens verticalmente */
-  flex-wrap: nowrap; /* Impede a quebra de linha */
-  overflow: hidden; /* Impede elementos de sair do container */
+  width: 100%;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
 
   legend {
     font-size: 1.2rem;
@@ -222,31 +241,46 @@ export const CheckboxLabel = styled.label<{ dia: string }>`
   }
 `;
 
-export const BoxInputEmployees = styled.input.attrs({ type: "checkbox" })`
+/* Você marcou ${dia} como "Sem Intervalo", mas não selecionou esse modo. */
+/* Preencha os horários de ${dia} (Sem Intervalo). */
+
+export const BoxInputEmployees = styled.input.attrs({ type: "checkbox" })<{
+  modo: "semIntervalo" | "comIntervalo" | "meioPeriodo";
+}>`
   appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid #ffff;
+  border: 1px solid #ffffff;
   border-radius: 4px;
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
   display: inline-block;
+  background-color: transparent;
 
   &:checked {
-    border-color: #ffff;
+    border-color: #ffffff;
+    background-color: ${({ modo }) =>
+      modo === "semIntervalo"
+        ? "#28A745"
+        : modo === "comIntervalo"
+          ? "#C5DE35"
+          : "#9E1E1E"};
   }
 
   &:checked::after {
-    content: "✅";
-    font-size: 100%;
+    content: "🗸";
+    font-size: 20px;
+    color: ${({ modo }) =>
+      modo === "semIntervalo"
+        ? "#ffff"
+        : modo === "comIntervalo"
+          ? "#1E3A8A"
+          : "#fff"};
     position: absolute;
-    top: -4.7px;
-    left: -0.2rem;
-  }
-
-  &:hover {
-    border-color: #357abd;
+    font-weight: 900;
+    top: -5px;
+    left: 1px;
   }
 
   &:disabled {
