@@ -207,10 +207,9 @@ export const CheckboxContainer = styled.fieldset`
 
   legend {
     font-size: 1.2rem;
-    color: #ffffff;
+    color: #ffff;
     font-weight: 600;
     position: relative;
-    white-space: nowrap;
   }
 `;
 
