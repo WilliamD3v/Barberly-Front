@@ -228,6 +228,14 @@ export const BoxImageProfile = styled.div`
   position: relative;
   margin-top: 1rem;
   left: 1rem;
+
+  .image_profile {
+    border-radius: 100%;
+    width: 8rem;
+    height: 8rem;
+    object-fit: cover;
+    object-position: center;
+  }
 `;
 
 export const BoxImageProduct = styled.div`

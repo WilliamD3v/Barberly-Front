@@ -275,7 +275,7 @@ export const BoxInputEmployees = styled.input.attrs({ type: "checkbox" })<{
     content: "";
     position: absolute;
     top: 2px;
-    left: 2px;
+    left: 1px;
     width: 16px;
     height: 16px;
     background-image: ${({ modo }) => {
