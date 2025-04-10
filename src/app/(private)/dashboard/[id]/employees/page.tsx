@@ -23,6 +23,7 @@ import {
   ModHoursIcon,
   BoxModHoursText,
   Container,
+  TitleDaysSelecteds,
 } from "./styled";
 import axios from "@/lib/axios";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
@@ -74,10 +75,8 @@ export default function EnviarDados() {
 
   const [diasMeioPeriodo, setDiasMeioPeriodo] = useState<string[]>([]);
 
-  const [horarioInicioMeioPeriodo, setHorarioInicioMeioPeriodo] =
-    useState("");
-  const [horarioFinalMeioPeriodo, setHorarioFinalMeioPeriodo] =
-    useState("");
+  const [horarioInicioMeioPeriodo, setHorarioInicioMeioPeriodo] = useState("");
+  const [horarioFinalMeioPeriodo, setHorarioFinalMeioPeriodo] = useState("");
 
   const [semIntervalo, setSemIntervalo] = useState(false);
   const [comIntervalo, setComIntervalo] = useState(false);
@@ -335,7 +334,7 @@ export default function EnviarDados() {
         return false;
       }
     }
-  
+
     // Com Intervalo
     if (diasComIntervalo.length > 0) {
       if (
@@ -350,7 +349,7 @@ export default function EnviarDados() {
         return false;
       }
     }
-  
+
     // Meio Período
     if (diasMeioPeriodo.length > 0) {
       if (!horarioInicioMeioPeriodo || !horarioFinalMeioPeriodo) {
@@ -360,7 +359,7 @@ export default function EnviarDados() {
         return false;
       }
     }
-  
+
     // Garante que pelo menos um dos modos tenha dia selecionado
     if (
       diasSemIntervalo.length === 0 &&
@@ -372,7 +371,7 @@ export default function EnviarDados() {
       setMessageBoolean(true);
       return false;
     }
-  
+
     return true;
   };
 
@@ -493,8 +492,7 @@ export default function EnviarDados() {
     setDiasMeioPeriodo(updatedDias);
   }, [diasSelecionadosMeioPeriodo]);
 
-
-  console.log(payload)
+  console.log(payload);
 
   return (
     <>
@@ -532,8 +530,8 @@ export default function EnviarDados() {
 
           {/* Checkboxes sempre visíveis e com cor do modo */}
           <ContainerSelectdHours>
+            <TitleDaysSelecteds>Dias Selecionados</TitleDaysSelecteds>
             <CheckboxContainer>
-              <legend>Dias Selecionados</legend>
               {diasSemana.map((dia) => {
                 let modoSelecionado:
                   | "semIntervalo"
