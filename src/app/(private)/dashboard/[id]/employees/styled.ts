@@ -207,7 +207,7 @@ export const CheckboxContainer = styled.fieldset`
 
   legend {
     font-size: 1.2rem;
-    color: #ffff;
+    color: #fff;
     font-weight: 600;
     position: relative;
   }
@@ -263,23 +263,30 @@ export const BoxInputEmployees = styled.input.attrs({ type: "checkbox" })<{
       modo === "semIntervalo"
         ? "#28A745"
         : modo === "comIntervalo"
-          ? "#C5DE35"
-          : "#9E1E1E"};
+        ? "#C5DE35"
+        : "#9E1E1E"};
   }
 
   &:checked::after {
-    content: "🗸";
-    font-size: 20px;
-    color: ${({ modo }) =>
-      modo === "semIntervalo"
-        ? "#ffff"
-        : modo === "comIntervalo"
-          ? "#1E3A8A"
-          : "#fff"};
+    content: "";
     position: absolute;
-    font-weight: 900;
-    top: -5px;
-    left: 1px;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-image: ${({ modo }) => {
+      const color =
+        modo === "semIntervalo"
+          ? "ffffff"
+          : modo === "comIntervalo"
+          ? "1E3A8A"
+          : "ffffff";
+      return `url("data:image/svg+xml;utf8,<svg fill='%23${color}' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20.285 2L9 13.57l-5.285-5.28L2 10l7 7L22.285 4z'/></svg>")`;
+    }};
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
   }
 
   &:disabled {
