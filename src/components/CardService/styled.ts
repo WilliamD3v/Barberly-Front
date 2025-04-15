@@ -45,6 +45,10 @@ export const ServiceContainer = styled.div`
   background-color: #2b3137;
   border-radius: 12px;
   box-shadow: 30px 6px 100px rgba(255, 255, 255, 0.2);
+
+  @media (max-width: 768px) {
+    box-shadow: 0px 0px 0px;
+  }
 `;
 
 // Estilo dos cards de serviço
@@ -76,17 +80,34 @@ export const ServiceItem = styled.div`
     color: #28a745;
     font-weight: 600;
     margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
   }
 
   .duration {
     font-size: 1rem;
     color: #6c757d;
     margin-top: 0.5rem;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
   }
 
   p {
     font-size: 1.1rem;
     margin-bottom: 1rem;
+
+    @media (max-width: 768px) {
+      font-size: .8rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    transform: scale(1.1);
   }
 `;
 
@@ -109,13 +130,13 @@ export const Alert = styled.p<{ isSuccess: boolean }>`
 `;
 
 export const FormContainerWrapper = styled.div`
-  width: 90%; /* Padrão para dispositivos menores */
-  max-width: 900px; /* Limita a largura em telas maiores */
+  width: 90%;
+  max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
   background-color: #2b3137;
   border-radius: 10px;
-  border: 2px solid #4F5051;
+  border: 2px solid #4f5051;
   box-shadow: 30px 6px 100px rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease-in-out;
 
@@ -125,17 +146,17 @@ export const FormContainerWrapper = styled.div`
 
   /* Ajuste para tablets e telas médias */
   @media (min-width: 768px) {
-    width: 60%; /* Reduz a largura para tablets */
+    width: 60%;
   }
 
   /* Ajuste para desktops */
   @media (min-width: 1024px) {
-    width: 40%; /* Configuração para telas maiores */
+    width: 40%;
   }
 
   /* Ajuste para telas ultra grandes */
   @media (min-width: 1440px) {
-    width: 30%; /* Mantém o design em telas muito grandes */
+    width: 30%;
   }
 `;
 
@@ -178,8 +199,8 @@ export const ContainerForm = styled.form`
 export const Input = styled.input`
   padding: 0.8rem 1.2rem;
   font-size: 1.1rem;
-  border: 1px solid #3E4245;
-  background: #3E4245;
+  border: 1px solid #3e4245;
+  background: #3e4245;
   color: #fff;
   border-radius: 5px;
   outline: none;
@@ -190,7 +211,7 @@ export const Input = styled.input`
   }
 
   &::placeholder {
-    color: #7B8085;
+    color: #7b8085;
   }
 
   &:hover {

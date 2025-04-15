@@ -1,17 +1,90 @@
 import styled from "styled-components";
 
-export const ContainerElements = styled.div`
-  position: relative;
-  width: 90%;
+export const Container = styled.div`
+  padding: 2rem;
+  width: 100%;
   margin: auto;
-  border: 4px solid rgb(255, 255, 255);
-  margin-top: 10rem;
-  padding-bottom: 5rem;
-  border-radius: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
 `;
 
+export const MainContent = styled.div`
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+export const StepContent = styled.div`
+  flex: 1;
+`;
+
+export const SideSummary = styled.div`
+  width: 300px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+export const SummaryBox = styled.div`
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+`;
+
+export const SummaryItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const TotalPrice = styled.div`
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: right;
+`;
+
+export const ProceedButton = styled.button`
+  margin-top: 1.5rem;
+  width: 100%;
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #157347;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+
 export const CardCart = styled.div`
-  background: #41474E;
+  background: #41474e;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -20,11 +93,20 @@ export const CardCart = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-
   position: fixed;
   top: 4rem;
   right: 3rem;
   z-index: 1000;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 1rem 1rem 0 0;
+  }
 `;
 
 export const TitleCart = styled.h2`
@@ -40,7 +122,7 @@ export const ContainerTitleCart = styled.div`
 `;
 
 export const ContainerElementsServices = styled.div`
-  background: #585D63;
+  background: #585d63;
   border-radius: 8px;
   padding: 12px;
   display: flex;
@@ -49,7 +131,7 @@ export const ContainerElementsServices = styled.div`
 `;
 
 export const ElementService = styled.div`
-  background: #6B7279;
+  background: #6b7279;
   border-radius: 8px;
   padding: 12px;
   display: flex;
@@ -68,7 +150,7 @@ export const BoxElementNumberService = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 6px 10px;
-  background: #585D63;
+  background: #585d63;
   border-radius: 6px;
 `;
 
@@ -111,7 +193,7 @@ export const TotalItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #7B8085;
+  color: #7b8085;
 `;
 
 export const IconWrapper = styled.span`
@@ -153,6 +235,7 @@ export const ContainerCart = styled.button`
   font-size: 30px;
   padding: 20px;
   overflow-y: auto;
+  z-index: 10;
 `;
 
 export const ConteinrLengthCart = styled.div`
@@ -193,40 +276,6 @@ export const CartButtonClose = styled.button`
   }
 `;
 
-export const ContainerTitle = styled.div`
-  margin-top: 3rem;
-  padding: 0 1rem;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    padding: 0 0.5rem;
-  }
-`;
-
-export const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 2rem;
-  position: relative;
-  display: inline-block;
-  padding-bottom: 10px;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 50%;
-    height: 3px;
-    background-color: #28a745;
-    position: absolute;
-    bottom: 0;
-    left: 25%;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
-`;
 
 export const EmployeesContainer = styled.div`
   display: flex;
@@ -239,6 +288,12 @@ export const EmployeesContainer = styled.div`
   background-color: #2b3137;
   border-radius: 12px;
   box-shadow: 30px 6px 100px rgba(255, 255, 255, 0.2);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
 `;
 
 export const EmployeesCard = styled.div`
@@ -261,6 +316,11 @@ export const EmployeesCard = styled.div`
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 100%;
   }
 `;
 
@@ -303,77 +363,45 @@ export const InputFormEmployees = styled.input`
 `;
 
 /* Agendamento de horario */
-export const ContainerTableEmployees = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
 
-export const TableEmployees = styled.div`
-  display: flex;
-  flex-wrap: wrap; /* Permite que os itens se ajustem em várias linhas, se necessário */
-`;
-
-export const DayContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 20px;
-  margin-bottom: 20px;
-`;
-
-export const BoxDay = styled.div`
-  text-align: center;
-  background: #3a4147;
-  width: 7rem;
-  border-radius: 15px;
-`;
-
-export const DaysStyled = styled.div`
-  font-weight: bold;
-`;
-
-export const DaysNumber = styled.div`
-  margin-top: 5px;
-`;
-
-export const ContainerInputDays = styled.div`
-  margin: 20px;
-`;
-
-export const TimeInput = styled.input`
-  padding: 8px;
-  font-size: 16px;
-  border: 2px solid #0070f3;
-  border-radius: 5px;
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-  background-color: #f5f5f5;
-  color: #333;
-`;
-
-export const ContainerHoursSelected = styled.div`
-  display: flex;
-`
-
-export const TextHours = styled.h1``
-
-export const ContainerHoursCancel = styled.div``
-
-export const ButtonHours = styled.button``
-
-export const ContainerButton = styled.div``;
 
 /* Stpe */
 export const ContainerStepButton = styled.div`
+  position: fixed;
+  bottom: 30rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+
   display: flex;
-  justify-content: space-around;
-  margin-top: 4rem;
+  justify-content: center;
+  gap: 70rem;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    bottom: 20rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+
+    display: flex;
+    justify-content: center;
+    gap: 17rem;
+    width: 100%;
+    max-width: 600px;
+    padding: 0 1rem;
+  }
 `;
-export const StepBack = styled.button``;
-export const StepNext = styled.button``;
+
+export const StepBack = styled.button`
+  font-size: 4rem;
+`;
+export const StepNext = styled.button`
+  font-size: 4rem;
+`;
 
 /* Barra de processo de etapas */
 export const ProgressBarContainer = styled.div`
@@ -425,4 +453,127 @@ export const StepLabel = styled.div`
   margin-top: 8px;
   font-size: 14px;
   color: white;
+`;
+
+
+/* Tabela de agendamento */
+
+export const ContainerElements = styled.div`
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+
+export const ContainerTableEmployees = styled.div`
+  background-color: #1e293b;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+`;
+
+export const ContainerTitle = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+export const Title = styled.h1`
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #fff;
+`;
+
+export const TableEmployees = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+`;
+
+export const DayContainer = styled.div`
+  background-color: #0f172a;
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #fff;
+`;
+
+export const BoxDay = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const DaysStyled = styled.span`
+  font-size: 1rem;
+  font-weight: 600;
+`;
+
+export const DaysNumber = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #38bdf8;
+`;
+
+export const ContainerInputDays = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+`;
+
+export const TimeInput = styled.input`
+  padding: 0.4rem;
+  border: 1px solid #94a3b8;
+  border-radius: 0.5rem;
+  background-color: #1e293b;
+  color: #fff;
+  width: 100%;
+`;
+
+export const ContainerHoursSelected = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+`;
+
+export const TextHours = styled.span`
+  font-weight: bold;
+  color: #4ade80;
+`;
+
+export const ContainerHoursCancel = styled.div`
+  margin-top: 0.5rem;
+`;
+
+export const ButtonHours = styled.button`
+  background-color: #ef4444;
+  color: white;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: 0.2s;
+  &:hover {
+    background-color: #dc2626;
+  }
+`;
+
+export const ContainerButton = styled.div`
+  margin-top: 0.5rem;
+  width: 100%;
+
+  button {
+    background-color: #10b981;
+    color: white;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    font-weight: 600;
+    transition: 0.2s;
+    &:hover {
+      background-color: #059669;
+    }
+  }
 `;

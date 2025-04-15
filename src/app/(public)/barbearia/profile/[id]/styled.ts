@@ -17,6 +17,7 @@ export const Container = styled.div`
   margin: auto;
   padding: 20px;
   font-family: Arial, sans-serif;
+  margin-bottom: 10rem;
 
   @media (max-width: 768px) {
     width: 100%;

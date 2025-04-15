@@ -4,11 +4,10 @@ import {
   getImageProfileData,
   getProduct,
   getServiceData,
-  /*   getImageProfileData, */
   getUserData,
 } from "@/hooks/useUsers";
 import { useQuery } from "@tanstack/react-query";
-import { useParams, usePathname, useRouter, } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import {
   BarbershopName,
   BoxBannerImage,
@@ -55,8 +54,6 @@ import {
   TitleProduct,
 } from "./styled";
 import { UserData } from "@/types/users";
-/* import { ImagensProfilesProps } from "@/types/imagesProfiles"; */
-import Map from "@/components/Map";
 import { AddressProps } from "@/types/address";
 import { useEffect, useState } from "react";
 import { ImagensProfilesProps } from "@/types/imagesProfiles";
@@ -67,6 +64,10 @@ import { ProductProps } from "@/types/products";
 
 import { FaMoneyBillAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
+import dynamic from "next/dynamic";
+import Footer from "@/components/Footer";
+
+const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
 export default function Agendamento() {
   const { id } = useParams();
@@ -111,8 +112,8 @@ export default function Agendamento() {
   };
 
   const hendleButtonEmployees = async () => {
-    router.push(`${Pathname}/funcionario`)
-  }
+    router.push(`${Pathname}/funcionario`);
+  };
 
   const limitedServices = getRandomServices(dataServices);
 
@@ -122,14 +123,7 @@ export default function Agendamento() {
       const addressBarber = `${dataAddress[0].street}, ${dataAddress[0].number}, ${dataAddress[0].neighborhood}, ${dataAddress[0].zipcode}`;
       setAddress(addressBarber);
     }
-  }, [dataAddress]); // O efeito depende de dataAddress
-
-  // Função para abrir o modal
-/*   const abrirModal = (userId: string): void => {
-    router.push(`${Pathname}/funcionario/${userId}`);
-  }; */
-
-  console.log(dataAddress);
+  }, [dataAddress]);
 
   return (
     <>
@@ -155,7 +149,9 @@ export default function Agendamento() {
             <Description>
               Experiência única em cortes e barba com estilo.
             </Description>
-            <ScheduleButton onClick={hendleButtonEmployees}>Agendar Horário</ScheduleButton>
+            <ScheduleButton onClick={hendleButtonEmployees}>
+              Agendar Horário
+            </ScheduleButton>
           </Info>
         </BoxElementsProfile>
 
@@ -258,6 +254,10 @@ export default function Agendamento() {
           </CardsWrapperProduct>
         </BoxProduct>
       </Container>
+
+      <main>
+        <Footer />
+      </main>
     </>
   );
 }

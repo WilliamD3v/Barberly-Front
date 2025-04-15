@@ -8,7 +8,7 @@ interface MapProps {
   address: string;
 }
 
-export default function Map({ address }: MapProps) {
+export default function MapComponent({ address }: MapProps) {
   const [location, setLocation] = useState<{ lat: number; lon: number } | null>(
     null
   );
@@ -30,7 +30,6 @@ export default function Map({ address }: MapProps) {
 
   if (!location) return <p>Carregando mapa...</p>;
 
-  // Criando um ícone personalizado de localização
   const defaultIcon = new L.Icon({
     iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
     iconSize: [25, 41],
@@ -38,7 +37,6 @@ export default function Map({ address }: MapProps) {
     popupAnchor: [1, -34],
   });
 
-  // Função para atualizar o centro e zoom do mapa
   function UpdateMap() {
     const map = useMap();
     map.setView([location!.lat, location!.lon], 18);
